@@ -1,0 +1,48 @@
+\section{Heap}
+
+Heap, bir ağaç tabanlı veri yapısıdır ve genellikle öncelik kuyruğu gibi işlemler için kullanılır. Heap, her seviyesinin tamamen dolu olduğu ve son seviyedeki düğümlerin sol tarafa dayalı olduğu bir tam ikili ağaçtır. Yani, heap yapısında her düğümün iki çocuğu olabilir ve son seviyede bulunan düğümler mümkün olduğunca soldan sağa doğru doldurulur. Heap yapısı, dizi (array) kullanılarak uygulanır. İkili ağaç olmasına rağmen, heap yapısı bir dizide tutulur. Dizinin belirli indekslerine göre ebeveyn ve çocuk düğümler bulunabilir. Bir düğümün indeksi i ise:
+
+\begin{itemize}
+    \item \textbf{Ebeveyn Düğümü}: (i - 1) // 2
+    \item \textbf{Sol Çocuk Düğümü}: 2 * i + 1
+    \item \textbf{Sağ Çocuk Düğümü}: 2 * i + 2
+\end{itemize}
+
+\subsubsection{Access (Erişim)}
+
+Heap, genellikle bir dizi (array) üzerinde temsil edildiği için doğrudan erişim mümkündür. Kök düğüm (heap’in en küçük veya en büyük elemanı) dizideki ilk elemandır. Dizinin ilk elemanına erişmek, $O(1)$ zaman alır. Dizide herhangi bir düğüme doğrudan dizin ile erişebilirsiniz. Ancak, belirli bir düzeni korumak için bu erişim yalnızca o anki değeri okumaya yöneliktir; heap özelliği korunarak bu düğümde güncelleme yapılması karmaşıktır.
+
+\subsubsection{Search (Arama)}
+
+Heap yapısında herhangi bir elemanı aramak, düzensiz bir ikili ağaç yapısı olduğu için zorlayıcı olabilir. Min Heap'te yalnızca kök düğüm en küçük değeri garanti eder. Bu nedenle, heap’in başka herhangi bir düğümünde arama yapmak, genel durumda tüm düğümleri ziyaret etmeyi gerektirir. Arama işlemi $O(n)$ zaman alır çünkü Min veya Max Heap yalnızca kısmi sıralama sağlar ve belirli bir düğümün tam yerini bulmak için tüm düğümleri gözden geçirebilirsiniz.
+
+\subsubsection{Insertion (Ekleme)}
+
+Heap yapısına bir eleman eklemek, heap özelliklerini koruyacak şekilde yapılmalıdır. Dizinin sonuna eklenir. Eklenen elemanın heap kuralını bozup bozmadığı kontrol edilir. Eğer Min Heap'te eklenen eleman ebeveyninden küçükse, bu eleman ebeveyniyle yer değiştirir (aynı durum Max Heap'te en büyük eleman için geçerlidir). Bu süreç, yeni eklenen eleman uygun yere gelene kadar devam eder. Zaman karmaşıklığı $O(logn)$'dir çünkü en kötü durumda eleman, ağacın yüksekliği boyunca yukarı doğru taşınır ve heap tam bir ikili ağaç olduğu için yüksekliği $O(logn)$'dir.
+
+\subsubsection{Deletion (Silme)}
+
+Heap’ten eleman silme, kök düğümün (en küçük eleman Min Heap’te, en büyük eleman Max Heap’te) silinmesi olarak gerçekleştirilir. Min veya Max Heap'te kök düğümü silinir. Bu, dizide birinci elemanın silinmesi anlamına gelir. Dizideki son düğüm köke getirilir. Yeni kök düğüm heap kuralını bozar mı diye kontrol edilir. Eğer Min Heap'te kök düğüm çocuklarından büyükse (Max Heap'te kök düğüm küçükse), yer değiştirir ve uygun yerine kadar aşağı taşınır. Zaman karmaşıklığı $O(logn)$'dir çünkü en kötü durumda eleman, ağacın yüksekliği boyunca yukarı doğru taşınır ve heap tam bir ikili ağaç olduğu için yüksekliği $O(logn)$'dir.
+
+\subsection{Heapify İşlemi}
+
+Hem ekleme hem de silme işlemlerinde kullanılan "heapify" işlemi, heap özelliklerini korumak için düğümleri yukarı veya aşağı taşıma sürecidir.
+
+\begin{itemize}
+    \item \textbf{Heapify Up (Yukarı Düzenleme)}: Yeni eklenen düğüm yukarı doğru hareket ederken ebeveyniyle yer değiştirir (ekleme işleminde kullanılır).
+    \item \textbf{Heapify Down (Aşağı Düzenleme)}: Silme işleminden sonra yeni köke taşınan düğüm aşağı doğru çocuklarıyla karşılaştırılarak yer değiştirir.
+\end{itemize}
+
+\newpage
+
+\subsection{Min Heap}
+
+Min Heap, her düğümün değeri çocuk düğümlerinin değerlerinden küçük veya eşit olduğu bir heap türüdür. Kök düğüm, tüm düğümler içindeki en küçük değeri içerir. Alt düğümlerden herhangi biri, kendi çocuk düğümlerinden küçük olmak zorunda değildir; önemli olan sadece ebeveyn-düğüm ilişkileridir. Minimum değeri hızlıca elde etmek gereken durumlarda (öncelik kuyruğu) ve en kısa yol bulma algoritması olan dijkstra algoritmasında en düşük maliyetli düğümü bulmak için Min Heap kullanılır.
+
+\newpage
+
+\subsection{Max Heap}
+
+Max Heap, her düğümün değeri çocuk düğümlerinin değerlerinden büyük veya eşit olduğu bir heap türüdür. Kök düğüm, tüm düğümler içindeki en büyük değeri içerir. Aynı şekilde, alt düğümler kendi çocuk düğümlerinden büyük olmak zorunda değildir.
+
+\newpage

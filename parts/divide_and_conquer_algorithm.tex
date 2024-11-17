@@ -1,0 +1,196 @@
+\section{Divide and Conquer Algorithm}
+
+Divide and Conquer (Böl ve Yönet) Algoritmaları, büyük bir problemi daha küçük alt problemlere ayırarak çözme yöntemini benimseyen algoritmalardır. Bu yaklaşım, her bir alt problemi çözmek için aynı yöntemi kullanarak, nihayetinde tüm problemin çözümüne ulaşır. Bölme, problemi küçük parçalara ayırmayı, çözümleme, bu alt problemleri çözmeyi ve birleştirme, çözümleri birleştirerek nihai çözümü elde etmeyi içerir.
+
+\begin{itemize}
+    \item \textbf{Bölme (Divide)}: Problem, daha küçük alt problemlere bölünür. Bu adım, problemi daha yönetilebilir hale getirir.
+    \item \textbf{Çözümleme (Conquer)}: Alt problemler çözülür. Eğer alt problemler yeterince küçükse doğrudan çözülür, ya da yine aynı yaklaşım uygulanarak alt problemlere bölünür.
+    \item \textbf{Birleştirme (Combine)}: Alt problemlerin çözümleri birleştirilerek, orijinal problemin çözümü elde edilir.
+\end{itemize}
+
+\newpage
+
+\subsection{Number Factor}
+
+Number Factor (Sayı Çarpanı), bir sayıyı tam bölen pozitif tam sayılardan her birine denir. Bir sayıyı bölen tüm sayılar, o sayının çarpanlarıdır. Bir sayının çarpanlarını bulmak, o sayıyı daha küçük parçalara ayırma işlemidir. Bir sayının çarpanlarını bulmak için o sayıyı 1'den kendisine kadar olan sayılarla böleriz ve bölen sayılar, çarpanlar olarak kabul edilir.
+
+\begin{itemize}
+    \item \textbf{Normal Yöntem}: Sayıyı 1'den başlayarak, kendisine kadar olan tüm sayılarla böleriz. Her bölen, sayının bir çarpanı olacaktır.
+    \item \textbf{Verimli Yöntem}: Daha hızlı bir yaklaşımda, sadece sayının kareköküne kadar olan sayılarla bölme yapılır. Çünkü her çarpanın eşleşen bir başka çarpanı vardır.
+\end{itemize}
+
+\newpage
+
+\subsection{House Robber}
+
+House Robber (Ev Hırsızı) problemi, klasik bir dinamik programlama problemidir. Bu problem, belirli bir sayıdaki evlerden, her evin içinde bir miktar değer (ya da para) bulunduğu ve ardışık evlerin soyulamayacağı bir senaryoda, en yüksek değeri (parayı) çalabilen bir hırsızın nasıl hareket etmesi gerektiğini sorar.
+
+Bir hırsız, bir dizi evin her birinde belirli bir miktarda para olduğunu öğrenir. Ancak, hırsız iki ardışık evi aynı anda soyamaz. Bu nedenle, hırsız bir ev soyarsa, bir sonraki evi soymak zorunda değildir. Amaç, en fazla parayı çalmaktır. Kurallar:
+
+\begin{itemize}
+    \item Hırsız ardışık evleri soyamaz.
+    \item Hırsız sadece bir seferde bir ev soyar.
+    \item Hırsızın hedefi, soymadığı evlerden en yüksek toplam parayı çalmaktır.
+\end{itemize}
+
+Bu problem dinamik programlama (DP) kullanarak çözülür. DP yaklaşımında, her evin soyulup soyulmayacağını değerlendiririz ve önceki evlerin sonuçlarını kullanarak çözümü iteratif olarak inşa ederiz. Her evin soygun kararını verirken, önceki evlerin çalınan paralarına bakarız. Eğer $i$. ev soygunu yapılırsa, $(i-1)$'inci evin soygununu yapamayız. $dp[i] = i$'inci eve kadar olan evlerde, en fazla parayı çalma miktarı. Eğer $i$'inci ev soyulursa, $(i-2)$'inci evin sonucu ile $i$'inci evin parasını ekleriz. Eğer $i$'inci ev soyulmazsa, $(i-1)$'inci evin sonucunu alırız.
+
+\begin{lstlisting}[language=Python]
+def house_robber(nums):
+    if not nums:
+        return 0
+
+    if len(nums) == 1:
+        return nums[0]
+
+    dp = [0] * len(nums)
+    dp[0] = nums[0]
+    dp[1] = max(nums[0], nums[1])
+
+    for i in range(2, len(nums)):
+        dp[i] = max(dp[i - 1], nums[i] + dp[i - 2])
+
+    return dp[-1]
+
+nums = [2, 7, 9, 3, 1]
+house_robber(nums) # 12
+\end{lstlisting}
+
+\newpage
+
+\subsection{Convert One String to Another}
+
+"Convert one string to another" (bir stringi diğerine dönüştürme) problemi, bir diziyi (string) başka bir diziye dönüştürmek için gereken işlemleri belirlemeyi amaçlar. Bu, genellikle iki dizi arasındaki edit distance (düzenleme mesafesi) veya Levenshtein mesafesi olarak bilinen bir problemle ilişkilidir. Levenshtein mesafesi, iki dizi arasındaki en küçük düzenleme adımlarını ölçen bir algoritmadır. Bu adımlar, ekleme (insertion), silme (deletion) veya değiştirme (substitution) işlemlerinden birini içerir.
+
+\begin{itemize}
+    \item \textbf{Ekleme (Insertion)}: Bir karakteri diziye eklemek.
+    \item \textbf{Silme (Deletion)}: Bir karakteri diziden çıkarmak.
+    \item \textbf{Değiştirme (Substitution)}: Bir karakteri başka bir karakterle değiştirmek.
+\end{itemize}
+
+Çözüm, iki stringin her bir karakteri arasında karşılaştırma yapılacak bir matris oluşturulur. Matrisin her hücresine, ilgili karakterlerin dönüştürülmesi için gereken minimum işlemi yerleştiririz (ekleme, silme, değiştirme). Matrisin en sağ alt hücresindeki değer, iki string arasındaki minimum dönüşüm adımlarını gösterir.
+
+\begin{lstlisting}[language=Python]
+def levenshtein_distance(str1, str2):
+    n1 = len(str1) + 1
+    n2 = len(str2) + 1
+
+    matrix = [[0] * n2 for _ in range(n1)]
+
+    for i in range(n1):
+        matrix[i][0] = i
+
+    for j in range(n2):
+        matrix[0][j] = j
+
+    for i in range(1, n1):
+        for j in range(1, n2):
+            if str1[i - 1] == str2[j - 1]:
+                cost = 0
+
+            else:
+                cost = 1
+
+            matrix[i][j] = min(
+                matrix[i - 1][j] + 1,
+                matrix[i][j - 1] + 1,
+                matrix[i - 1][j - 1] + cost
+            )
+
+    return matrix[-1][-1]
+\end{lstlisting}
+
+\newpage
+
+\subsection{Zero-One Knapsack Problem}
+
+Bu problem, belirli bir kapasiteye sahip bir sırt çantasına (veya başka bir depolama alanına) çeşitli nesneler (veya eşya) yerleştirme problemini tanımlar. Her nesnenin bir değeri ve ağırlığı vardır ve sırt çantasının kapasitesi sınırlıdır. Amaç; kapasiteyi aşmadan, sırt çantasına yerleştirilebilecek nesnelerin toplam değerini en üst seviyeye çıkarmaktır. Her nesne ya sırt çantasına konur (seçilir) ya da konmaz (seçilmez). Bu yüzden bu problem "0-1" sırt çantası problemi olarak adlandırılır, çünkü her nesne yalnızca iki durumda olabilir: ya seçilir (1), ya da seçilmez (0).
+
+\begin{lstlisting}[language=Python]
+def zero_one_knapsack(weights, values, capacity):
+    n = len(weights)
+    dp = [[0] * (capacity + 1) for _ in range(n + 1)]
+
+    for i in range(1, n + 1):
+        for w in range(1, capacity + 1):
+            if weights[i-1] <= w:
+                dp[i][w] = max(dp[i-1][w], dp[i-1][w - weights[i-1]] + values[i-1])
+            else:
+                dp[i][w] = dp[i-1][w]
+    
+    return dp[n][capacity]
+\end{lstlisting}
+
+\newpage
+
+\subsection{Longest Common Subsequence (LCS)}
+
+Longest Common Subsequence (LCS), iki dizenin (veya stringin) en uzun ortak alt dizisini (subsequence) bulmaya yönelik bir problemdir. Buradaki "alt dizi" (subsequence), dizenin elemanlarını sırasıyla ama arada başka elemanlar da olabilen bir şekilde seçmeyi ifade eder. Yani, dizenin bazı elemanlarını atlayarak, sırasını koruyarak, diğer dizenin içinde yer alan bir dizi oluşturabilirsiniz.
+
+\begin{lstlisting}[language=Python]
+def lcs(X, Y):
+    m = len(X)
+    n = len(Y)
+    
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if X[i - 1] == Y[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1] + 1
+            else:
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+    
+    return dp[m][n]
+\end{lstlisting}
+
+\newpage
+
+\subsection{Longest Palindromic Subsequence (LPS)}
+
+Longest Palindromic Subsequence (LPS), bir dizenin (string) en uzun palindromik alt dizisini bulmaya yönelik bir problemdir. Buradaki "palindromik alt dizi" (subsequence), karakterlerin tersten okunduğunda aynı olan bir dizedir. Verilen bir dize, içindeki karakterlerden sırasıyla (ama ardışık olmak zorunda olmayan) en uzun palindromik alt diziyi bulmamız istenir. Bu alt dizi, tersten okunduğunda da aynı olacak şekilde sıralanmalıdır.
+
+\begin{lstlisting}[language=Python]
+def longestPalindromicSubsequence(X):
+    n = len(X)
+    dp = [[0] * n for _ in range(n)]
+    for i in range(n-1, -1, -1):
+        for j in range(i, n):
+            if X[i] == X[j] and i != j:
+                dp[i][j] = dp[i+1][j-1] + 2
+            elif i == j:
+                dp[i][j] = 1
+            else:
+                dp[i][j] = max(dp[i+1][j], dp[i][j-1])
+    
+    return dp[0][:n-1]
+\end{lstlisting}
+
+\newpage
+
+\subsection{Minimum Cost to Reach the Last Cell}
+
+Minimum Cost to Reach the Last Cell, bir ızgarada (grid) veya matris üzerinde, başlangıç hücresinden son hücreye kadar gitmek için gereken minimum maliyeti bulmaya yönelik bir problemdir. Bu problem genellikle, her hücreye gitmek için bir maliyetin olduğu, ancak sadece sağa ve aşağıya hareket edebileceğiniz bir ızgara için çözülür. Verilen bir m x n ızgarasında (matris), her hücre bir maliyet değerine sahiptir. Başlangıç noktası genellikle sol üst köşe (0, 0) hücresidir ve hedef noktası sağ alt köşe (m-1, n-1) hücresidir. Bu problemde, sol üst köşeden sağ alt köşeye kadar giderken, her adımda sağa veya aşağıya doğru hareket edebileceğiniz ve her hücrenin bir maliyeti olduğu varsayılır. Amaç, başlangıç hücresinden hedef hücresine ulaşırken toplam maliyetin minimum olmasıdır.
+
+\begin{lstlisting}[language=Python]
+def minCostToReachEnd(grid):
+    row, col = len(grid), len(grid[0])
+    
+    dp = [[0] * col for _ in range(row)]
+    
+    dp[0][0] = grid[0][0]
+    
+    for j in range(1, col):
+        dp[0][j] = dp[0][j-1] + grid[0][j]
+    
+    for i in range(1, row):
+        dp[i][0] = dp[i-1][0] + grid[i][0]
+    
+    for i in range(1, row):
+        for j in range(1, col):
+            dp[i][j] = min(dp[i-1][j], dp[i][j-1]) + grid[i][j]
+    
+    return dp[row-1][col-1]
+\end{lstlisting}
+
+\newpage

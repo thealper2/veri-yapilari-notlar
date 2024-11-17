@@ -1,0 +1,94 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tocloft}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{tgbonum}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{lipsum}
+\usepackage{hyperref}
+
+\titleformat{\section}[hang]{\normalfont\Large\bfseries}{\thesection}{1em}{}[\titlerule]
+\newcommand{\authorname}{Alper Karaca}
+
+\fancyhf{}
+\fancyhead[R]{\authorname}
+\renewcommand{\headrulewidth}{0pt}
+
+\fancyfoot[R]{\thepage}
+
+\pagestyle{fancy}
+
+\cftsetindents{section}{0em}{3em}
+\cftsetindents{subsection}{0em}{4em}
+
+\renewcommand\cfttoctitlefont{\hfill\Large\bfseries}
+\renewcommand\cftaftertoctitle{\hfill\mbox{}}
+
+\setcounter{tocdepth}{2}
+
+\title{Veri Yapilari Notlar (www.cyberdatascience.com.tr)}
+\author{Alper Karaca}
+\date{January 2024}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+	language=Python,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
+
+\begin{document}
+
+\maketitle
+
+\newpage
+\tableofcontents
+\newpage
+
+\input{parts/big_o.tex}
+\input{parts/theta_notation.tex}
+\input{parts/omega_notation.tex}
+\input{parts/array.tex}
+\input{parts/list.tex}
+\input{parts/tuple.tex}
+\input{parts/dictionary.tex}
+\input{parts/class.tex}
+\input{parts/oop_concepts.tex}
+\input{parts/linked_list.tex}
+\input{parts/stack.tex}
+\input{parts/queue.tex}
+\input{parts/tree_traversal.tex}
+\input{parts/trie.tex}
+\input{parts/hash_table.tex}
+\input{parts/heap.tex}
+\input{parts/sorting_algorithms.tex}
+\input{parts/searching_algorithms.tex}
+\input{parts/single_source_shortest_path.tex}
+\input{parts/topological_sort_algorithm.tex}
+\input{parts/graph_algorithms.tex}
+\input{parts/greedy_algorithm.tex}
+\input{parts/divide_and_conquer_algorithm.tex}
+\input{parts/dynamic_programming.tex}
+\input{parts/backtracking.tex}
+
+\end{document}

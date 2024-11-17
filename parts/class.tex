@@ -1,0 +1,31 @@
+\section{Class (Sınıf)}
+
+Class, nesnelerin oluşturulması ve yönetilmesi için bir şablon veya modeldir. Bir nesnenin veri alanlarını ve metodlarını tanımlayan bir yapıdır. Sınıflar, nesneleri oluşturmak için bir şablon görevi görür. Her sınıf, bir nesne oluşturulduğunda kullanılacak olan veri yapısını ve o veri yapısına uygulanacak olan fonksiyonları tanımlar. 
+
+Bir sınıf tanımlandığında, o sınıfın bir örneği (instance) oluşturulmadığı sürece bellekte herhangi bir yer kaplamaz. Bir nesne oluşturulduğunda, bellek alanı tahsis edilir. Bu alan, sınıfın veri alanlarını saklamak için kullanılır. Sınıfın bir nesnesi oluşturulduğunda, sınıfın constructor (yapıcı) metodu çağrılır. Bu metod, nesne oluşturulurken başlatılması gereken değişkenleri ayarlamak için kullanılır. Nesne oluşturulduktan sonra, o nesne üzerinden sınıfın metodlarına erişilir ve veri alanları üzerinde işlemler yapılabilir.
+
+\subsection{Metodlar}
+
+\begin{itemize}
+    \item \textbf{Yapıcı (Constructor)}: Sınıfın bir örneği oluşturulurken çağrılan özel bir metoddur. Nesnenin başlangıç durumunu ayarlamak için kullanılır.
+    \item \textbf{Yıkıcı (Destructor)}: Sınıfın bir nesnesi yok edilirken çağrılan özel bir metoddur. Bellek temizleme veya kaynak yönetimi işlemleri için kullanılır.
+    \item \textbf{Özellik Metodları (Accessor)}: Sınıfın veri alanlarına erişim sağlamak için kullanılan metodlardır. Genellikle 'get' prefix'i ile başlar.
+    \item \textbf{Değiştirici Metodlar (Mutator)}: Sınıfın veri alanlarını değiştirmek için kullanılan metodlardır. Genellikle 'set' prefix'i ile başlar.
+    \item \textbf{Diğer Metodlar}: Sınıfa özgü işlevsellik sunan metodlar, uygulamanın gereksinimlerine bağlı olarak tanımlanabilir.
+\end{itemize}
+
+\subsection{Python Kodu - Class}
+
+\begin{lstlisting}[language=Python]
+class Car:
+    def __init__(self, name, model, year):
+        self.name = name
+        self.model = model
+        self.year = year
+    def info(self):
+        return f"{self.name} - {self.model} - {self.year}"
+car1 = Car("Toyota", "Corolla", 2020)
+print(car1.info())
+\end{lstlisting}
+
+\newpage

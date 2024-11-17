@@ -1,0 +1,925 @@
+\section{Linked List (Bağlı Liste)}
+
+Linked list (bağlantılı liste), dinamik bir veri yapısıdır ve verilerin bir dizi eleman olarak saklanmasını sağlar. Her bir eleman (düğüm) bir veri alanı ve bir veya daha fazla gösterici (pointer) içerir. Bu göstericiler, listedeki bir sonraki (veya önceki) düğümü işaret eder. Bu yapılar, sabit boyutlu dizilere göre daha esneklik sunar çünkü elemanlar eklenirken veya silinirken bellek yeniden tahsis edilmez. Linked list, eleman eklemek veya çıkarmak için bellekte yeniden boyutlandırma gerektirmez. Bu, sabit boyutlu dizilere göre daha esneklik sağlar. Her düğüm, veriyi ve bir veya daha fazla gösterici içerir. Tek yönlü linked list'lerde her düğüm yalnızca bir sonraki düğümü gösterirken, iki yönlü linked list'lerde her düğüm hem bir sonraki hem de bir önceki düğümü gösterir. Linked list’lerde, düğümleri eklemek veya silmek $O(1)$ zaman karmaşıklığı ile yapılabilir. Düğüm başına daha fazla bellek kullanır çünkü veri yanı sıra göstericiler için ek bellek alanı ayrılır. Linked list, elemanları sıralı bir şekilde saklar, ancak elemanların dizideki indeksine doğrudan erişim yoktur. Bir linked list’in başını tutmak için genellikle bir baş (head) göstericisi kullanılır. Bu baş gösterici, listenin ilk düğümüne işaret eder. Eğer liste boşsa, baş gösterici null değerini alır.
+
+Linked list, düğümlerin bellekte bağımsız olarak saklanmasıyla çalışır. Her düğüm, aşağıdaki gibi iki bileşenden oluşur:
+
+\begin{itemize}
+    \item \textbf{Veri Alanı}: Düğümde saklanan veri.
+    \item \textbf{Gösterici (Pointer)}: Bir sonraki düğümün bellekteki adresini tutar. İki yönlü linked list’lerde ayrıca bir önceki düğümün adresini de içerir.
+\end{itemize}
+
+\newpage
+
+\subsection{Singly Linked List (Tek Yönlü Bağlı Liste)}
+
+\begin{itemize}
+    \item Her düğüm, bir veri alanı ve bir sonraki düğümün adresini (gösterici) içerir.
+    \item Düğümlere yalnızca ileri yönde erişim sağlanabilir.
+    \item Eklemek ve silmek kolaydır, ancak bir düğümden önceki düğüme erişmek zordur.
+\end{itemize}
+
+\subsubsection{Python - Singly Linked List}
+
+\begin{lstlisting}[language=Python]
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+class SinglyLinkedList:
+    def __init__(self):
+        self.head = None
+
+    def append(self, data):
+        new_node = Node(data)
+        if not self.head:
+            self.head = new_node
+            return
+
+        last_node = self.head
+        while last_node.next:
+            last_node = last_node.next
+
+        last_node.next = new_node
+
+    def prepend(self, data):
+        new_node = Node(data)
+        new_node.next = self.head
+        self.head = new_node
+
+    def pop_first(self):
+        if not self.head:
+            return None
+
+        popped_data = self.head.data
+        self.head = self.head.next
+
+    def pop_last(self):
+        if not self.head:
+            return
+
+        previous_node = None
+        current_node = self.head
+
+        while current_node.next:
+            previous_node = current_node
+            current_node = current_node.next
+
+        if previous_node:
+            previous_node.next = None
+        else:
+            self.head = None
+
+    def search(self, data):
+        current_node = self.head
+        while current_node:
+            if current_node.data == data:
+                return True
+
+            current_node = current_node.next
+
+        return False
+
+    def get(self, index):
+        current_node = self.head
+        count = 0
+        while current_node:
+            if count == index:
+                return current_node.data
+
+            count += 1
+            current_node = current_node.next
+
+        return None
+
+    def update(self, index, data):
+        current_node = self.head
+        count = 0
+        while current_node:
+            if count == index:
+                current_node.data = data
+
+            count += 1
+            current_node = current_node.next
+
+    def insert(self, index, data):
+        new_node = Node(data)
+
+        if index == 0:
+            self.prepend(data)
+            return
+
+        current_node = self.head
+        count = 0
+
+        while current_node:
+            if count == index - 1:
+                new_node.next = current_node.next
+                current_node.next = new_node
+                return
+
+            count += 1
+            current_node = current_node.next
+
+    def remove(self, index):
+        if not self.head:
+            return
+
+        if index == 0:
+            self.pop_first()
+            return
+
+        current_node = self.head
+        count = 0
+
+        while current_node:
+            if count == index - 1:
+                if current_node.next:
+                    current_node.next = current_node.next.next
+
+            count += 1
+            current_node = current_node.next
+        
+
+    def traverse(self):
+        elements = []
+        current_node = self.head
+        
+        while current_node:
+            elements.append(current_node.data)
+            current_node = current_node.next
+
+        return elements
+        
+    def display(self):
+        current_node = self.head
+        
+        while current_node:
+            print(current_node.data, end=" -> ")
+            current_node = current_node.next
+
+        print("None")
+
+sll = SinglyLinkedList()
+sll.append(1)
+sll.append(2)
+sll.append(3)
+sll.display()
+# 1 -> 2 -> 3 -> None
+
+sll.prepend(data=0)
+sll.display()
+# 0 -> 1 -> 2 -> 3 -> None
+
+sll.pop_first()
+sll.display()
+# 1 -> 2 -> 3 -> None
+
+sll.search(3)
+# True
+
+sll.get(2)
+# 3
+
+sll.insert(index=1, data=5)
+sll.display()
+# 1 -> 5 -> 2 -> 3 -> None
+
+sll.update(index=2, data=4)
+sll.display()
+# 1 -> 5 -> 4 -> 3 -> None
+
+sll.remove(index=1)
+sll.display()
+# 1 -> 4 -> 3 -> None
+
+sll.pop_last()
+sll.display()
+# 1 -> 4 -> None
+
+sll.traverse()
+# [1, 5, 4, 3]
+\end{lstlisting}
+
+\newpage
+
+\subsection{Doubly Linked List (Çift Yönlü Bağlı Liste)}
+
+\begin{itemize}
+    \item Her düğüm, bir veri alanı, bir sonraki düğümün adresini ve bir önceki düğümün adresini içerir.
+    \item Düğümler arasında ileri ve geri yönde gezinme imkanı sağlar.
+    \item Ekleme ve silme işlemleri daha esneklik sunar, ancak daha fazla bellek kullanır.
+\end{itemize}
+
+\subsubsection{Python - Doubly Linked List}
+
+\begin{lstlisting}[language=Python]
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.prev = None
+        self.next = None
+
+class DoublyLinkedList:
+    def __init__(self):
+        self.head = None
+
+    def append(self, data):
+        new_node = Node(data)
+        if not self.head:
+            self.head = new_node
+            return
+
+        last_node = self.head
+        while last_node.next:
+            last_node = last_node.next
+
+        last_node.next = new_node
+        new_node.prev = last_node
+
+    def prepend(self, data):
+        new_node = Node(data)
+        if not self.head:
+            self.head = new_node
+            return
+
+        new_node.next = self.head
+        self.head.prev = new_node
+        self.head = new_node
+
+    def pop_first(self):
+        if not self.head:
+            return
+
+        self.head = self.head.next
+        if self.head:
+            self.head.prev = None
+
+    def pop_last(self):
+        if not self.head:
+            return
+
+        current_node = self.head
+        while current_node.next:
+            current_node = current_node.next
+
+        if current_node.prev:
+            current_node.prev.next = None
+        else:
+            self.head = None
+
+    def remove(self, index):
+        if not self.head:
+            return
+
+        current_node = self.head
+        count = 0
+
+        while current_node and count < index:
+            current_node = current_node.next
+            count += 1
+
+        if not current_node:
+            return
+
+        if current_node.prev:
+            current_node.prev.next = current_node.next
+        else:
+            self.head = current_node.next
+
+        if current_node.next:
+            current_node.next.prev = current_node.prev
+
+    def search(self, data):
+        current_node = self.head
+        while current_node:
+            if current_node.data == data:
+                return True
+
+            current_node = current_node.next
+
+        return False
+
+    def get(self, index):
+        current_node = self.head
+        count = 0
+        while current_node:
+            if count == index:
+                return current_node.data
+
+            count += 1
+            current_node = current_node.next
+
+        return None
+
+    def update(self, index, data):
+        current_node = self.head
+        count = 0
+
+        while current_node:
+            if count == index:
+                current_node.data = data
+
+            count += 1
+            current_node = current_node.next
+
+    def insert(self, index, data):
+        new_node = Node(data)
+
+        if index == 0:
+            self.prepend(data)
+            return
+
+        current_node = self.head
+        count = 0
+
+        while current_node:
+            if count == index - 1:
+                new_node.next = current_node.next
+                new_node.prev = current_node
+                current_node.next.prev = new_node
+                current_node.next = new_node
+                return
+
+            count += 1
+            current_node = current_node.next
+
+    def traverse(self):
+        elements = []
+        current_node = self.head
+        
+        while current_node:
+            elements.append(current_node.data)
+            current_node = current_node.next
+
+        return elements
+
+    def reverse_traverse(self):
+        elements = []
+        current_node = self.head
+
+        while current_node.next:
+            current_node = current_node.next
+
+        while current_node:
+            elements.append(current_node.data)
+            current_node = current_node.prev
+
+        return elements
+
+    def display(self):
+        current_node = self.head
+        
+        while current_node:
+            print(current_node.data, end=" <-> ")
+            current_node = current_node.next
+
+        print("None")
+
+dll = DoublyLinkedList()
+dll.append(1)
+dll.append(2)
+dll.append(3)
+dll.display()
+# 1 <-> 2 <-> 3 <-> None
+
+dll.prepend(data=0)
+dll.display()
+# 0 <-> 1 <-> 2 <-> 3 <-> None
+
+dll.pop_first()
+dll.display()
+# 1 <-> 2 <-> 3 <-> None
+
+dll.search(3)
+# True
+
+dll.get(2)
+# 3
+
+dll.insert(index=1, data=5)
+dll.display()
+# 1 <-> 5 <-> 2 <-> 3 <-> None
+
+dll.update(index=2, data=4)
+dll.display()
+# 1 <-> 5 <-> 4 <-> 3 <-> None
+
+dll.remove(index=1)
+dll.display()
+# 1 <-> 4 <-> 3 <-> None
+
+dll.pop_last()
+dll.display()
+# 1 <-> 4 <-> None
+
+dll.traverse()
+# [1, 4]
+
+dll.reverse_traverse()
+# [4, 1]
+\end{lstlisting}
+
+\newpage
+
+\subsection{Circular Linked List (Dairesel Bağlı Liste)}
+
+\begin{itemize}
+    \item Son düğüm, bir sonraki düğüm olarak ilk düğümü işaret eder, bu nedenle liste dairesel bir yapı oluşturur.
+    \item Tek yönlü veya çift yönlü olabilir.
+    \item Herhangi bir düğümden başlayarak tüm listeyi gezmek mümkündür.
+\end{itemize}
+
+\subsubsection{Python - Circular Linked List}
+
+\begin{lstlisting}[language=Python]
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+class CircularLinkedList:
+    def __init__(self):
+        self.head = None
+
+    def append(self, data):
+        new_node = Node(data)
+        if not self.head:
+            self.head = new_node
+            new_node.next = self.head
+            return
+
+        last_node = self.head
+        
+        while last_node.next != self.head:
+            last_node = last_node.next
+
+        last_node.next = new_node
+        new_node.next = self.head
+
+    def prepend(self, data):
+        new_node = Node(data)
+        if not self.head:
+            self.head = new_node
+            new_node.next = self.head
+            return
+
+        last_node = self.head
+        
+        while last_node.next != self.head:
+            last_node = last_node.next
+
+        new_node.next = self.head
+        self.head = new_node
+        last_node.next = self.head
+
+    def pop_first(self):
+        if not self.head:
+            return
+
+        if self.head.next == self.head:
+            self.head = None
+            return
+
+        last_node = self.head
+        
+        while last_node.next != self.head:
+            last_node = last_node.next
+
+        last_node.next = self.head.next
+        self.head = self.head.next
+
+    def pop_last(self):
+        if not self.head:
+            return
+
+        if self.head.next == self.head:
+            self.head = None
+            return
+
+        last_node = self.head
+        prev_node = None
+
+        while last_node.next != self.head:
+            prev_node = last_node
+            last_node = last_node.next
+
+        prev_node.next = self.head
+
+    def search(self, data):
+        if not self.head:
+            return
+
+        current_node = self.head
+
+        while True:
+            if current_node.data == data:
+                return True
+
+            current_node = current_node.next
+            if current_node == self.head:
+                break
+
+        return False
+
+    def get(self, index):
+        if not self.head:
+            return
+
+        current_node = self.head
+        count = 0
+
+        while True:
+            if count == index:
+                return current_node.data
+
+            count += 1
+            current_node = current_node.next
+            if current_node == self.head:
+                break
+
+    def insert(self, index, data):
+        new_node = Node(data)
+        
+        if index == 0:
+            self.prepend(data)
+            return
+
+        current_node = self.head
+        count = 0
+
+        while True:
+            if count == index - 1:
+                new_node.next = current_node.next
+                current_node.next = new_node
+                return
+
+            count += 1
+            current_node = current_node.next
+            if current_node == self.head:
+                break
+
+    def update(self, index, data):
+        if not self.head:
+            return
+
+        current_node = self.head
+        count = 0
+
+        while True:
+            if count == index:
+                current_node.data = data
+                return
+
+            count += 1
+            current_node = current_node.next
+
+            if current_node == self.head:
+                break
+
+    def remove(self, index):
+        if not self.head:
+            return
+
+        if index == 0:
+            self.pop_first()
+            return
+
+        current_node = self.head
+        prev_node = None
+        count = 0
+
+        while True:
+            if count == index:
+                prev_node.next = current_node.next
+                if current_node == self.head:
+                    self.head = prev_node.next
+
+                return
+
+            prev_node = current_node
+            current_node = current_node.next
+            count += 1
+            
+            if current_node == self.head:
+                break
+
+    def traverse(self):
+        if not self.head:
+            return
+
+        elements = []
+        current_node = self.head
+        
+        while True:
+            elements.append(current_node.data)
+            current_node = current_node.next
+            if current_node == self.head:
+                break
+
+        return elements
+
+    def display(self):
+        current_node = self.head
+        
+        while True:
+            print(current_node.data, end=" -> ")
+            current_node = current_node.next
+            if current_node == self.head:
+                break
+
+        print("(head)")
+
+cll = CircularLinkedList()
+cll.append(1)
+cll.append(2)
+cll.append(3)
+cll.display()
+# 1 -> 2 -> 3 -> (head)
+
+cll.pop_first()
+cll.display()
+# 1 -> 2 -> 3 -> (head)
+
+cll.search(3)
+# True
+
+cll.get(2)
+# 3
+
+cll.insert(index=1, data=5)
+cll.display()
+# 1 -> 5 -> 2 -> 3 -> (head)
+
+cll.update(index=2, data=4)
+cll.display()
+# 1 -> 5 -> 4 -> 3 -> (head)
+
+cll.remove(index=1)
+cll.display()
+# 1 -> 4 -> 3 -> (head)
+
+cll.pop_last()
+cll.display()
+# 1 -> 4 -> (head)
+
+cll.traverse()
+# [1, 4]
+\end{lstlisting}
+
+\newpage
+
+\subsection{Circular Doubly Linked List (Dairesel Çift Yönlü Bağlı Liste)}
+
+\begin{itemize}
+    \item Her düğüm, hem önceki hem de sonraki düğümlerin adreslerini içerir ve son düğüm, ilk düğümü işaret eder.
+    \item İleri ve geri yönde gezinme imkanı sunar ve dairesel yapı ile her yerden erişim sağlar.
+\end{itemize}
+
+\subsubsection{Python - Circular Doubly Linked List}
+
+\begin{lstlisting}[language=Python]
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.prev = None
+        self.next = None
+
+class CircularDoublyLinkedList:
+    def __init__(self):
+        self.head = None
+
+    def append(self, data):
+        new_node = Node(data)
+        if not self.head:
+            self.head = new_node
+            new_node.next = new_node
+            new_node.prev = new_node
+            return
+
+        last_node = self.head.prev
+        last_node.next = new_node
+        new_node.prev = last_node
+        new_node.next = self.head
+        self.head.prev = new_node
+
+    def prepend(self, data):
+        new_node = Node(data)
+        if not self.head:
+            self.head = new_node
+            new_node.next = new_node
+            new_node.prev = new_node
+            return
+
+        last_node = self.head.prev
+        new_node.next = self.head
+        self.head.prev = new_node
+        new_node.prev = last_node
+        last_node.next = new_node
+        self.head = new_node
+
+    def pop_first(self):
+        if not self.head:
+            return
+
+        if self.head.next == self.head:
+            self.head = None
+
+        else:
+            last_node = self.head.prev
+            self.head = self.head.next
+            self.head.prev = last_node
+            last_node.next = self.head
+
+    def pop_last(self):
+        if not self.head:
+            return
+
+        if self.head.next == self.head:
+            self.head = None
+
+        else:
+            last_node = self.head.prev
+            second_last_node = last_node.prev
+            second_last_node.next = self.head
+            self.head.prev = second_last_node
+
+    def search(self, value):
+        if not self.head:
+            return False
+
+        current_node = self.head
+        while True:
+            if current_node.data == value:
+                return True
+
+            current_node = current_node.next
+            if current_node == self.head:
+                break
+
+        return False
+
+    def get(self, index):
+        if not self.head:
+            return
+
+        current_node = self.head
+        count = 0
+
+        while True:
+            if count == index:
+                return current_node.data
+
+            current_node = current_node.next
+            count += 1
+
+            if current_node == self.head:
+                break
+
+    def insert(self, index, data):
+        if index == 0:
+            self.prepend(data)
+            return
+
+        new_node = Node(data)
+        current_node = self.head
+        count = 0
+
+        while count < index - 1 and current_node.next != self.head:
+            current_node = current_node.next
+            count += 1
+
+        new_node.next = current_node.next
+        new_node.prev = current_node
+        current_node.next.prev = new_node
+        current_node.next = new_node
+
+    def update(self, index, data):
+        if not self.head:
+            return
+
+        current_node = self.head
+        count = 0
+
+        while True:
+            if count == index:
+                current_node.data = data
+                return
+
+            current_node = current_node.next
+            count += 1
+
+            if current_node == self.head:
+                break
+
+    def remove(self, index):
+        if not self.head:
+            return
+
+        if index == 0:
+            self.pop_first()
+            return
+
+        current_node = self.head
+        count = 0
+
+        while count < index and current_node.next != self.head:
+            current_node = current_node.next
+            count += 1
+
+        if current_node == self.head:
+            return
+
+        current_node.prev.next = current_node.next
+        current_node.next.prev = current_node.prev
+
+    def traverse(self):
+        if not self.head:
+            return
+
+        elements = []
+        current_node = self.head
+
+        while True:
+            elements.append(current_node.data)
+            current_node = current_node.next
+            if current_node == self.head:
+                break
+
+        return elements
+
+    def reverse_traverse(self):
+        if not self.head:
+            return
+
+        elements = []
+        current_node = self.head.prev
+
+        while True:
+            elements.append(current_node.data)
+            current_node = current_node.prev
+            if current_node == self.head.prev:
+                break
+
+        return elements
+
+    def display(self):
+        if not self.head:
+            print("List is empty.")
+            return
+
+        current_node = self.head
+        while True:
+            print(current_node.data, end=" <-> ")
+            current_node = current_node.next
+            if current_node == self.head:
+                break
+
+        print("(head)")
+
+cdll = CircularDoublyLinkedList()
+cdll.append(1)
+cdll.append(2)
+cdll.append(3)
+cdll.display()
+# 1 <-> 2 <-> 3 <-> (head)
+
+cdll.prepend(data=0)
+cdll.display()
+# 0 <-> 1 <-> 2 <-> 3 <-> (head)
+
+cdll.pop_first()
+cdll.display()
+# 1 <-> 2 <-> 3 <-> (head)
+
+cdll.search(3)
+# True
+
+cdll.get(2)
+# 3
+
+cdll.insert(index=1, data=5)
+cdll.display()
+# 1 <-> 5 <-> 2 <-> 3 <-> (head)
+
+cdll.update(index=2, data=4)
+cdll.display()
+# 1 <-> 5 <-> 4 <-> 3 <-> (head)
+
+cdll.remove(index=1)
+cdll.display()
+# 1 <-> 4 <-> 3 <-> (head)
+
+cdll.pop_last()
+cdll.display()
+# 1 <-> 4 <-> (head)
+
+cdll.traverse()
+# [1, 4]
+
+cdll.reverse_traverse()
+# [4, 1]
+\end{lstlisting}
+
+\newpage

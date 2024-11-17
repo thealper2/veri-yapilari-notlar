@@ -1,0 +1,321 @@
+\section{Queue (Kuyruk)}
+
+Queue (kuyruk), FIFO (First In First Out) prensibine dayanır. Yani, bir kuyruğa eklenen ilk eleman, kuyruktan çıkarılan ilk elemandır. Bu özellik, kuyrukları birçok uygulamada, özellikle işlem sıralama ve görev yönetimi gibi alanlarda çok kullanışlı hale getirir. Bir yazıcıda kuyruk oluşturarak, ilk gönderilen belge ilk önce yazdırılır. İşletim sistemleri, işlemleri sıraya koymak için kuyrukları kullanır. İlk gelen işlem, ilk olarak işlenir. Elemanlar, kuyrukta sıralı bir şekilde yer alır; ilk eklenen eleman ilk olarak çıkar. İki temel işlem yapılır:
+
+\begin{itemize}
+    \item \textbf{Enqueue}: Kuyruğa bir eleman eklemek için kullanılan işlemdir.
+    \item \textbf{Dequeue}: Kuyruktan bir elemanı çıkarmak için kullanılan işlemdir.
+\end{itemize}
+
+Kuyruktaki elemanlara sadece baştan (ön) erişilebilir, sonuna (arka) ekleme yapılabilir. Orta elemanlara doğrudan erişim yoktur.
+
+Kuyruk veri yapısı, genellikle iki temel yöntemle bellekte oluşturulabilir:
+
+\begin{itemize}
+    \item \textbf{Array (Dizi)}: Kuyruk, bir dizi (array) üzerinde tutulur. Enqueue işlemi dizi sonuna eleman eklerken, dequeue işlemi dizinin başından eleman çıkarır. Ancak, bu yöntemde dizi dolduğunda (overflow) yeni eleman eklemek mümkün olmaz.
+    \item \textbf{Linked List (Bağlı Liste)}: Bir kuyruk, bağlı liste (linked list) yapısı ile de oluşturulabilir. Bu yöntemde, her eleman (düğüm), bir sonraki düğümün adresini saklar. Enqueue işlemi listenin sonuna eleman eklerken, dequeue işlemi listenin başından elemanı çıkarır. Bu yaklaşım, kuyruk boyutunun dinamik olarak değişebilmesine olanak sağlar.
+\end{itemize}
+
+\subsection{İşlemler}
+
+\subsubsection{Insertion (Ekleme)}
+
+Ekleme, kuyruğun arkasına yeni bir eleman eklemek için kullanılır. Dizi kullanılıyorsa, eleman dizi sonuna eklenir ve arka indeks güncellenir. Bağlı liste kullanılıyorsa, yeni bir düğüm oluşturulur ve listenin sonuna eklenir. Zaman karmaşıklığı $O(1)$'dir. 
+
+\subsubsection{Deletion (Silme)}
+
+Silme, kuyruğun önünden bir eleman çıkarmak için kullanılır. Eleman dizinin başından çıkarılır ve ön indeks güncellenir. Ancak, bu işlem sırasında dizinin tüm elemanlarını kaydırmak gerekebilir. Bağlı liste kullanılıyorsa, baştaki düğüm silinir ve baş referansı bir sonraki düğüme güncellenir. Zaman karmaşıklığı $O(n)$'dir. Eleman silindikten sonra kalan tüm elemanlar kaydırılmalıdır.
+
+\subsubsection{Access (Erişim)}
+
+Kuyruktaki ilk elemanı görmek için kullanılan işlemdir. Dizi kullanılıyorsa, ilk eleman dizi indeksinden erişilir. Bağlı liste kullanılıyorsa, basicstyleaş düğümdeki eleman doğrudan erişilir. Zaman karmaşıklığı $O(1)$'dir. 
+
+\subsubsection{Insertion (Ekleme)}
+
+Kuyruktaki belirli bir elemanı bulmak için kullanılır. Bu işlem, sıranın tamamını kontrol etmeyi gerektirir. Zaman karmaşıklığı $O(n)$'dir. Eleman, kuyruğun tamamı boyunca arandığı için her bir eleman kontrol edilmelidir.
+
+\newpage
+
+\subsection{Simple Queue (Basit Kuyruk)}
+
+Temel FIFO (ilk giren, ilk çıkar) prensibi ile çalışan sıradan bir kuyruktur. Elemanlar, kuyruk sonuna eklenir ve kuyruk önünden çıkarılır.
+
+\begin{lstlisting}[language=Python]
+class Queue:
+    def __init__(self):
+        self.queue = []
+
+    def is_empty(self):
+        return len(self.queue) == 0
+
+    def enqueue(self, data):
+        self.queue.append(data)
+
+    def dequeue(self):
+        if self.is_empty():
+            return
+
+        self.queue.pop(0)
+
+    def peek(self):
+        if self.is_empty():
+            return
+
+        return self.queue[0]
+
+    def size(self):
+        return len(self.queue)
+
+    def display(self):
+        print("Queue:", self.queue)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Circular Queue (Döngüsel Kuyruk)}
+
+Dizi kullanılarak oluşturulan bir kuyruktur, ancak elemanların silinmesi ve eklenmesi sırasında dizinin başını ve sonunu döngüsel olarak kullanır. Bu, dizi belleğinin daha verimli kullanılmasını sağlar.
+
+\begin{lstlisting}[language=Python]
+class CircularQueue:
+    def __init__(self, size=10):
+        self.size = size
+        self.queue = [None] * size
+        self.front = -1
+        self.rear = -1
+
+    def is_empty(self):
+        return self.front == -1
+
+    def is_full(self):
+        return (self.rear + 1) % self.size == self.front
+
+    def enqueue(self, data):
+        if self.is_full():
+            return
+
+        if self.front == -1:
+            self.front = 0
+
+        self.rear = (self.rear + 1) % self.size
+        self.queue[self.rear] = data
+
+    def dequeue(self):
+        if self.is_empty():
+            return
+
+        if self.front == self.rear:
+            self.front = -1
+            self.rear = -1
+        else:
+            self.front = (self.front + 1) % self.size
+
+    def peek(self):
+        if self.is_empty():
+            return
+
+        return self.queue[self.front]
+
+    def display(self):
+        if self.is_empty():
+            return
+
+        i = self.front
+        elements = []
+        while i != self.rear:
+            elements.append(self.queue[i])
+            i = (i + 1) % self.size
+
+        elements.append(self.queue[self.rear])
+        print("Queue:", elements)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Double Ended Queue (Çift Yönlü Kuyruk)}
+
+Hem ön hem de arka uçtan eleman ekleyip çıkarılabilen bir kuyruktur. Bu, bir kuyruk ile bir yığın (stack) arasında bir yapı sağlar. Deque olarak da adlandırılır.
+
+\begin{lstlisting}[language=Python]
+class DoubleEndedQueue:
+    def __init__(self, size=10):
+        self.size = size
+        self.deque = [None] * size
+        self.front = -1
+        self.rear = -1
+
+    def is_empty(self):
+        return self.front == -1
+
+    def is_full(self):
+        return (self.rear + 1) % self.size == self.front
+
+    def insert_front(self, data):
+        if self.is_full():
+            return
+
+        if self.is_empty():
+            self.front = 0
+            self.rear = 0
+        else:
+            self.front = (self.front - 1 + self.size) % self.size
+
+        self.deque[self.front] = data
+
+    def insert_rear(self, data):
+        if self.is_full():
+            return
+
+        if self.is_empty():
+            self.front = 0
+            self.rear = 0
+        else:
+            self.rear = (self.rear + 1) % self.size
+
+        self.deque[self.rear] = data
+
+    def delete_front(self):
+        if self.is_empty():
+            return
+
+        if self.front == self.rear:
+            self.front = -1
+            self.rear = -1
+        else:
+            self.front = (self.front + 1) % self.size
+
+    def delete_rear(self):
+        if self.is_empty():
+            return
+
+        if self.front == self.rear:
+            self.front = -1
+            self.rear = -1
+        else:
+            self.rear = (self.rear - 1 + self.size) % self.size
+
+    def get_front(self):
+        if self.is_empty():
+            return
+
+        return self.deque[self.front]
+
+    def get_rear(self):
+        if self.is_empty():
+            return
+
+        return self.deque[self.rear]
+
+    def display(self):
+        if self.is_empty():
+            return
+
+        i = self.front
+        elements = []
+        while i != self.rear:
+            elements.append(self.deque[i])
+            i = (i + 1) % self.size
+
+        elements.append(self.deque[self.rear])
+        print("Queue:", elements)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Priority Queue (Öncelik Kuyruğu)}
+
+Her elemanın bir öncelik değeri vardır ve elemanlar, önceliklerine göre çıkarılır. Yüksek öncelikli elemanlar, daha düşük öncelikli elemanlardan önce çıkarılır.
+
+\begin{lstlisting}[language=Python]
+class PriorityQueue:
+    def __init__(self):
+        self.queue = []
+
+    def is_empty(self):
+        return len(self.queue) == 0
+
+    def insert(self, data, priority):
+        self.queue.append((data, priority))
+
+    def delete(self):
+        if self.is_empty():
+            return
+
+        max_priority_index = 0
+        for i in range(len(self.queue)):
+            if self.queue[i][1] > self.queue[max_priority_index][1]:
+                max_priority_index = i
+
+        self.queue.pop(max_priority_index)
+
+    def display(self):
+        if self.is_empty():
+            return
+
+        for data, priority in self.queue:
+            print(f"{data}, Priority: {priority}")
+\end{lstlisting}
+
+\newpage
+
+\subsection{Binary Queue (İkili Kuyruk)}
+
+Özel bir tür öncelik kuyruğudur. Elemanlar, bir ikili ağaç yapısı kullanılarak düzenlenir. Her eleman, ikili ağaçta belirli bir öncelik sırasına göre yerleştirilir.
+
+\newpage
+
+\subsection{Multilevel Queue (Çok Seviyeli Kuyruk)}
+
+Farklı öncelik seviyelerine sahip birden fazla kuyruktan oluşur. Her kuyruk kendi kurallarına göre işlenir, bu da sistemde farklı türde görevleri yönetmeyi sağlar.
+
+\begin{lstlisting}[language=Python]
+class Queue:
+    def __init__(self):
+        self.queue = []
+
+    def is_empty(self):
+        return len(self.queue) == 0
+
+    def enqueue(self, data):
+        self.queue.append(data)
+
+    def dequeue(self):
+        if self.is_empty():
+            return
+
+        self.queue.pop(0)
+        
+    def display(self):
+        print("Queue:", self.queue)
+
+class MultilevelQueue:
+    def __init__(self, levels=5):
+        self.levels = [Queue() for _ in range(levels)]
+
+    def enqueue(self, data, priority_level):
+        if 0 <= priority_level < len(self.levels):
+            self.levels[priority_level].enqueue(data)
+    
+    def dequeue(self):
+        for i, queue in enumerate(self.levels):
+            if not queue.is_empty():
+                queue.dequeue()
+
+    def display(self):
+        for i, queue in enumerate(self.levels):
+            print(f"Level {i}:", queue.queue)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Multilevel Feedback Queue (Çok Seviyeli Öncelik Kuyruğu)}
+
+Çok seviyeli kuyruk yapısının bir uzantısıdır. Elemanlar, önceliklerine göre kuyruklar arasında geçiş yapabilir, bu da esnek bir işlem yönetimi sağlar.
+
+\newpage
+
+\subsection{Asynchronous Queue (Asenkron Kuyruk)}
+
+Üretici-tüketici modeline dayanan bir kuyruktur. Üreticiler verileri kuyruga eklerken, tüketiciler verileri kuyruktan alır. Genellikle çoklu iş parçacıkları ile çalışır.
+
+\newpage

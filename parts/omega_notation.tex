@@ -1,0 +1,31 @@
+\section{Omega Notation}
+
+Omega notasyonu, algoritmaların zaman karmaşıklığını ifade etmek için kullanılan bir notasyondur. En iyi durum analizini yapmak için kullanılır ve algoritmanın en az ne kadar süre alacağını belirtir. Bu, algoritmanın çalışma süresinin alt sırasını tanımlar.
+
+\[ T(n) = \Omega(f(n)) \]
+
+Burada:
+
+\begin{itemize}
+    \item $T(n)$: Algoritmanın çalışma süresi (giriş boyutu n için).
+    \item $f(n)$: Algoritmanın en iyi durum karmaşıklığını temsil eden fonksiyon.
+\end{itemize}
+
+Bir algoritmanın $\Omega$ notasyonu ile tanımlanabilmesi için, aşağıdaki koşulların sağlanması gerekir:
+
+\begin{enumerate}
+    \item Pozitif bir $c$ sayısı ve $n_0$ sayısı bulunmalıdır.
+    \item Tüm $n \geq n_0$ için $T(n) \geq c \cdot f(n)$ olmalıdır.
+\end{enumerate}
+
+Örneğin bir algoritmanın çalışma süresi $T(n) = 3n^2 + 2n + 1$ olsun. Bu durumda, $T(n)$ için $\Omega$ notasyonunu hesaplamak istersek:
+
+\begin{enumerate}
+    \item En baskın terimi belirleriz.
+    \item Bu durumda $f(n) = n^2$ olacaktır.
+    \item $T(n) = \Omega(n^2)$ olarak ifade edilebilir.
+\end{enumerate}
+
+Sonuç olarak, bu algoritmanın en iyi durumu en az $c \cdot n^2$ kadar süre alır.
+
+\newpage

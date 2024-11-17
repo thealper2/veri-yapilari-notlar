@@ -1,0 +1,358 @@
+\section{Searching Algorithms}
+
+\subsection{Linear Search}
+
+Linear Search, bir dizide bir elemanı bulmak için kullanılan arama algoritmasıdır. Bu algoritmada, aranan eleman dizinin başından sonuna kadar sırayla incelenir ve eşleşen bir eleman bulunduğunda işlem durdurulur. Eşleşen eleman yoksa, dizinin sonuna kadar kontrol edilir ve aranan elemanın bulunmadığı sonucuna varılır. Verilerin sıralanmış olup olmamasından bağımsız olarak çalışır. Zaman karmaşıklığı:
+
+\begin{itemize}
+    \item En iyi durumda (aranan eleman dizinin ilk elemanı ise) $O(1)$.
+    \item En kötü durumda (aranan eleman dizinin son elemanı veya dizide bulunmuyorsa) $O(n)$.
+    \item Ortalama durum $O(\frac{n}{2})$, bu da $O(n)$ ile aynı büyüklüktedir.
+\end{itemize}
+
+\subsubsection{Python Kodu - Linear Search}
+
+\begin{lstlisting}[language=Python]
+def linear_search(array, target):
+    for i in range(len(array)):
+        if array[i] == target:
+            return i
+
+    return -1
+\end{lstlisting}
+
+\newpage
+
+\subsection{Binary Search}
+
+Binary Search, her adımda arama aralığını yarıya indirerek aranan elemanı bulmaya çalışmaktır. Bu yüzden Binary Search sadece sıralı dizilerde kullanılabilir. Binary Search, sıralı bir dizinin ortasındaki elemanı kontrol eder ve ardından aranan elemanın bu elemandan büyük mü küçük mü olduğuna karar verir. Eğer aranan eleman ortadaki elemandan küçükse, dizinin sol yarısında arama yapılır; büyükse, sağ yarısında arama yapılır. Bu süreç eleman bulunana kadar ya da arama aralığı boşalana kadar devam eder. Zaman karmaşıklığı:
+
+\begin{itemize}
+    \item En iyi durumda (aranan eleman dizinin tam ortasında ise) $O(1)$.
+    \item En kötü durumda $O(logn)$. Arama işlemi logaritmik olarak azalarak ilerler, çünkü her adımda arama aralığı yarıya indirilir.
+    \item Ortalama durum $O(logn)$.
+\end{itemize}
+
+\subsubsection{Python Kodu - Binary Search}
+
+\begin{lstlisting}[language=Python]
+def binary_search(array, target):
+    low = 0
+    high = len(array) - 1
+
+    while low <= high:
+        mid = (low + high) // 2
+
+        if array[mid] == target:
+            return mid
+
+        elif array[mid] > target:
+            high = mid - 1
+
+        elif array[mid] <= target:
+            low = mid + 1
+
+    return -1
+\end{lstlisting}
+
+\newpage
+
+\subsection{Jump Search}
+
+Jump search, sıralı bir dizide belirli bir elemanı bulmak için kullanılır. Binary Search gibi verileri adım adım işlemek yerine, diziyi belirli bir büyüklükte atlayarak arama yapar. Eğer bir atlama esnasında aranan elemanı geçerse, geri dönüp önceki adımda bu aralıkta arama yapar. Atlama büyüklüğü, dizinin uzunluğunun karekökü kadardır. Linear Search'ten daha hızlı fakat Binary Search'den daha yavaş çalışır. Zaman karmaşıklığı;
+
+\begin{itemize}
+    \item En iyi durumda (aranan eleman ilk adımda bulunursa) $O(1)$.
+    \item En kötü durumda $O(\sqrt{n})$. Arama sırasındaki sıçramaların sayısı dizinin karekökü ile sınırlıdır.
+    \item Ortalama durum $O(\sqrt{n})$.
+\end{itemize}
+
+\subsubsection{Python Kodu - Jump Search}
+
+\begin{lstlisting}[language=Python]
+def jump_search(array, target):
+    n = len(array)
+
+    step = int(n ** 0.5)
+    prev = 0
+    
+    while array[min(step, n) - 1] < target:
+        prev = step
+        step += int(n ** 0.5)
+        if prev >= n:
+            return -1
+    
+    while array[prev] < target:
+        prev += 1
+        if prev == min(step, n):
+            return -1
+    
+    if array[prev] == target:
+        return prev
+    
+    return -1
+\end{lstlisting}
+
+\newpage
+
+\subsection{Interpolation Search}
+
+Interpolation Search (Lineer Enterpolasyon Araması), sıralı bir dizide aranan değerin veri aralığındaki konumunu tahmin ederek arama yapar. Veriler eşit dağılım gösterdiğinde oldukça verimlidir. Binary Search'ten farkı ortadaki elemanı değil, aranan elemanın olası konumunu hesaplamasıdır. Algoritma, aranan elemanın veri kümesindeki konumunu bir doğrusal enterpolasyon (tahmin) formülüyle bulmaya çalışır. Bu formül, dizinin son elemanıyla ilk elemanı arasındaki farkı kullanarak aranan elemanın dizi içerisindeki yaklaşık yerini bulur. Sonrasında bu pozisyondaki eleman kontrol edilir. Eğer eleman aranan değere eşit değilse, formül tekrar uygulanarak yeni bir tahmin yapılır ve süreç aranan eleman bulunana kadar devam eder. Zaman karmaşıklığı;
+
+\begin{itemize}
+    \item En iyi durumda (aranan elemanın tahmini konumu tam olarak doğruysa.) $O(1)$.
+    \item En kötü durumda (elemanlar düzensiz dağılmışsa, algoritma tüm elemanları kontrol edebilir) $O(n)$.
+    \item Ortalama durum $O(log(logn))$.
+\end{itemize}
+
+\subsubsection{Python Kodu - Interpolation Search}
+
+\begin{lstlisting}[language=Python]
+def interpolation_search(array, target):
+    low = 0
+    high = len(array) - 1
+
+    while low <= high and target >= array[low] and target <= array[high]:
+        if low == high:
+            if array[low] == target:
+                return low
+            return -1
+
+        pos = low + ((high - low) // (array[high] - array[low]) * (target - array[low]))
+
+        if array[pos] == target:
+            return pos
+        
+        if array[pos] > target:
+            high = pos - 1
+        else:
+            low = pos + 1
+    
+    return -1
+\end{lstlisting}
+
+\newpage
+
+\subsection{Exponential Search}
+
+Exponential Search, Binary Search ile birlikte çalışır ve sıralı dizinin başında hızlı bir şekilde uygun bir aralık bulup, bu aralık içinde Binary Search kullanarak hedef elemanı bulmayı amaçlar. Algoritma, aranan elemanın dizi içerisindeki yerini bulmak için önce uygun bir aralık belirler. Bu aralık, üstel olarak genişletilir. Aralık belirlendikten sonra, bu aralık içinde Binary Search uygulanarak eleman bulunur. Zaman karmaşıklığı;
+
+\begin{itemize}
+    \item En iyi durumda (aranan eleman dizinin başında ise) $O(1)$.
+    \item En kötü durumda $O(logn)$.
+    \item Ortalama durum $O(logn)$. Uygun aralığı bulmak üstel artışla yapıldığı için zaman karmaşıklığı logaritmik olur.
+\end{itemize}
+
+\subsubsection{Python Kodu - Exponential Search}
+
+\begin{lstlisting}[language=Python]
+def binary_search(array, left, right, target):
+    while left <= right:
+        mid = left + (right - left) // 2
+        if array[mid] == target:
+            return mid
+
+        if array[mid] > target:
+            right = mid - 1
+        else:
+            left = mid + 1
+    return -1
+
+def exponential_search(array, target):
+    n = len(array)
+    if array[0] == target:
+        return 0
+
+    i = 1
+    while i < n and array[i] <= target:
+        i = i * 2
+
+    return binary_search(array, i // 2, min(i, n-1), target)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Ternary Search}
+
+Ternary Search, Binary Search gibi bir böl ve fethet algoritmasıdır, ancak her adımda sıralı dizideki arama alanını ikiye bölmek yerine üçe böler. Ternary Search, her adımdan sonra üç alt parçaya bölerek hedef elemanın hangi aralıkta olduğunu belirler ve aramayı o aralıkta devam ettirir. Bu üç parça: dizinin sol tarafı, ortadaki bölüm, dizinin sağ tarafı. Zaman karmaşıklığı;
+
+\begin{itemize}
+    \item En iyi durumda (aranan eleman birinci yada ikinci bölmede ise) $O(1)$.
+    \item En kötü durumda $O(\text{log}_3 n)$. Her adımda dizi üç parçaya bölündüğü için logaritmik zaman karmaşıklığı vardır.
+    \item Ortalama durum $O(\text{log}_3 n)$.
+\end{itemize}
+
+\subsubsection{Python Kodu - Ternary Search}
+
+\begin{lstlisting}[language=Python]
+def ternary_search(array, left, right, target):
+    if right >= left:
+        mid1 = left + (right - left) // 3
+        mid2 = right - (right - left) // 3
+
+        if array[mid1] == target:
+            return mid1
+        if array[mid2] == target:
+            return mid2
+
+        if target < array[mid1]:
+            return ternary_search(array, left, mid1 - 1, target)
+
+        elif target > array[mid2]:
+            return ternary_search(array, mid2 + 1, right, target)
+
+        else:
+            return ternary_search(array, mid1 + 1, mid2 - 1, target)
+
+    return -1
+\end{lstlisting}
+
+\newpage
+
+\subsection{Sentinel Linear Search}
+
+Sentinel Linear Search, klasik Linear Search algoritmasının geliştirilmiş bir versiyonudur. Bu algoritmada, dizinin sonuna bir "sentinel" (bekçi) elemanı eklenir. Bu eleman, aranan değere eşit olur ve böylece algoritma, dizinin sonuna gelindiğinde ek bir sınama yapma ihtiyacını ortadan kaldırır. Son eleman, arama sırasında kontrol edilmeyen bir güvenlik (sentinel) olarak işlev görür. Bu yöntem, arama işleminin hızını artırmayı amaçlar, çünkü her adımda sınır kontrolü yapmaya gerek kalmaz.
+
+\begin{itemize}
+    \item En iyi durumda (aranan eleman dizinin ilk elemanı ise) $O(1)$.
+    \item En kötü durumda (aranan eleman dizinin son elemanı veya dizide bulunmuyorsa) $O(n)$.
+    \item Ortalama durum (aranan eleman rastgele bir konumda ise) $O(n)$.
+\end{itemize}
+
+\subsubsection{Python Kodu - Sentinel Linear Search}
+
+\begin{lstlisting}[language=Python]
+def sentinel_linear_search(array, target):
+    n = len(array)
+    last = array[n - 1]
+    array[n - 1] = target
+    i = 0
+    while array[i] != target:
+        i += 1
+    
+    array[n - 1] = last
+    if (i < n - 1) or (array[n - 1] == target):
+        return i
+    else:
+        return -1
+\end{lstlisting}
+
+\newpage
+
+\subsection{Meta Binary (One-Sided) Search}
+
+Meta Binary Search, klasik Binary Search algoritmasının farklı bir versiyonudur. Binary Search, belirli bir koşul altında diziyi ikiye bölerek arama yapar, ancak Meta Binary (One-Sided) Search, bir dizi pozisyonundaki değeri inceleyerek her adımdaki işlemi tek taraflı bir karar mekanizmasıyla gerçekleştirir. Zaman karmaşıklığı;
+
+\begin{itemize}
+    \item En iyi durumda $O(logn)$.
+    \item En kötü durumda $O(logn)$. Arama işlemi dizinin her iki yarısına da yayılmadan, sürekli bir tarafa yönlendirilir.
+    \item Ortalama durum $O(logn)$. Klasik Binary Search’e benzer şekilde, diziyi sürekli ikiye böldüğü için ortalama karmaşıklık $O(logn)$'dir.
+\end{itemize}
+
+\subsubsection{Python Kodu - Meta Binary Search}
+
+\begin{lstlisting}[language=Python]
+def meta_binary_search(array, target):
+    n = len(array)
+    result = -1
+    left = 0
+    right = n - 1
+    while left <= right:
+        mid = left + (right - left) // 2
+        if array[mid] >= target:
+            result = mid
+            right = mid - 1
+        else:
+            left = mid + 1
+    
+    return result
+\end{lstlisting}
+
+\newpage
+
+\subsection{Ubiquitous Binary Search}
+
+Ubiquitous Binary Search, belirli bir değerden büyük veya küçük olan elemanları bulmada daha hassas kontroller sağlar. Genellikle lower bound ve upper bound gibi problemler için kullanılır, yani belirli bir değerden büyük veya küçük olan ilk/son elemanı bulmayı hedefler. Zaman karmaşıklığı;
+
+\begin{itemize}
+    \item En iyi durumda $O(1)$.
+    \item En kötü durumda $O(logn)$. Klasik Binary Search gibi diziyi sürekli ikiye böldüğü için zaman karmaşıklığı logaritmik olur.
+    \item Ortalama durum $O(logn)$.
+\end{itemize}
+
+\subsubsection{Python Kodu - Ubiquitous Binary Search}
+
+\begin{lstlisting}[language=Python]
+def lower_bound(array, target):
+    left, right = 0, len(array)
+    while left < right:
+        mid = left + (right - left) // 2
+        if array[mid] < target:
+            left = mid + 1
+        else:
+            right = mid
+    return left
+
+def upper_bound(array, target):
+    left, right = 0, len(array)
+    while left < right:
+        mid = left + (right - left) // 2
+        if array[mid] <= target:
+            left = mid + 1
+        else:
+            right = mid
+    return left
+
+def ubiquitous_binary_search(array, target):
+    lb = lower_bound(array, target)
+    ub = upper_bound(array, target)
+    return lb, ub
+\end{lstlisting}
+
+\newpage
+
+\subsection{Fibonacci Search}
+
+Fibonacci Search, sıralı dizilerde eleman aramak için kullanılan bir algoritmadır. Bu algoritma, binary search algoritmasına benzer şekilde diziyi yarıya bölerek arama yapar, ancak burada kullanılan bölme işlemi, Fibonacci sayıları kullanılarak yapılır. Yani, veriyi bölme noktaları, Fibonacci sayılarına dayanarak belirlenir. Zaman karmaşıklığı;
+
+\begin{itemize}
+    \item En iyi durumda $O(1)$.
+    \item En kötü durumda $O(logn)$. Klasik Binary Search gibi diziyi sürekli ikiye böldüğü için zaman karmaşıklığı logaritmik olur.
+    \item Ortalama durum $O(logn)$.
+\end{itemize}
+
+\subsubsection{Python Kodu - Fibonacci Search}
+
+\begin{lstlisting}[language=Python]
+def fib_index(n):
+    if n <= 1:
+        return n
+    i = 2
+    fib_prev, fib_curr = 1, 1
+    while fib_curr < n:
+        fib_prev, fib_curr = fib_curr, fib_prev + fib_curr
+        i += 1
+    return i - 1
+
+def fibonacci_search(array, target, left=0, right=None):
+    if right is None:
+        right = len(arr) - 1
+
+    if left > right:
+        return -1
+    if array[left] == target:
+        return left
+    if array[right] == target:
+        return right
+
+    i = min(left + fib_index(right - left + 1) - 1, right)
+
+    if array[i] == target:
+        return i
+    elif array[i] < target:
+        return fibonacci_search(array, target, i + 1, right)
+    else:
+        return fibonacci_search(array, target, left, i - 1)
+\end{lstlisting}
+
+\newpage

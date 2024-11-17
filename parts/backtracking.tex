@@ -1,0 +1,65 @@
+\section{Backtracking}
+
+Backtracking, çözümü doğrulanan bir çözüm uzayında arama yapan ve çözüm bulana kadar çözümleri test eden bir algoritma yöntemidir. Bu yaklaşım genellikle kombinatoryal problemleri çözmek için kullanılır ve çözüm yolu bulunduktan sonra geri adım atılarak başka bir çözüm yolu aranır. Backtracking, genellikle bir karar ağacı üzerinden çözüm arar. Her bir düğümde, bir adım ilerleyerek çözüm yolu oluşturulur. Algoritma, belirli bir çözüm adımını seçer, ardından o adımın geçerli olup olmadığını kontrol eder. Geçerli değilse, geri adım atarak başka bir seçenek dener. Çoğu zaman çözüm arama süreci, çözüme ulaşana kadar adım adım ilerler, ancak geri adım atılması gerektiğinde gereksiz dallardan kaçınır. Ancak, kötü yapılandırılmış problemlerde yüksek zaman karmaşıklığına sahip olabilir. Çözüm yolu, genellikle çözüme ulaşan bir yol bulunana kadar keşfedilir. Eğer bir çözüm yolu geçerli değilse, başka bir yol araştırılır.  Geçersiz yolların (dead-end) ve sonsuz döngülerin ortadan kaldırılması amacıyla, önceki adımlar tekrar edilmez.
+
+\subsection{Backtracking vs Brute Force}
+
+Brute Force, her olasılığı tek tek deneyerek çözüm arama yöntemidir. Bir problemi çözmek için, mümkün olan tüm çözüm kombinasyonları üzerinde çalışılır. Brute Force, tüm çözüm alanını kontrol eder ve her kombinasyonu dener. Zaman karmaşıklığı çok yüksektir çünkü tüm olasılıkları denemek gerekebilir. Her durumda tüm seçenekler denendiği için, gereksiz hesaplamalar yapılır ve bazı geçersiz yollar da denenir. Küçük problemlerde uygun olabilir, ancak büyük problemlerde zaman ve bellek açısından verimli değildir.
+
+Backtracking, çözüm alanında adım adım ilerlerken, her adımda geçersiz bir yol (dead-end) bulunduğunda geri adım atarak alternatif yolları dener. Kısacası, yanlış yolda ilerlediği belirlenirse, bir önceki adımda geri dönüp başka bir yolu dener. Backtracking, çözüm sürecinde geçersiz yolları erken tespit eder ve bu yoldan dönerek başka yolları dener. Tüm olasılıkları denemek yerine, yalnızca geçerli olabilecek çözüm yolları üzerinde işlem yapar. Bu nedenle Brute Force'a göre daha verimlidir. Her adımda, çözümün geçerli olup olmadığını kontrol eder. Geçerli değilse, geri adım atar ve farklı bir çözüm arar.
+
+\newpage
+
+\subsection{N-Queens Problem}
+
+N-Queens Problemi, klasik bir kombinatoryal optimizasyon problemidir. Bu problemde, N adet kraliçe (queen) bir satranç tahtasına yerleştirilecektir. Amaç, bu N kraliçeyi tahtaya yerleştirirken, hiçbirinin birbirini tehdit etmemesini sağlamaktır. Kraliçeler satrançta, yatayda, dikeyde ve çaprazda her yöne tehdit edebilirler. Bu nedenle, her bir kraliçe, yatayda ve dikeyde bir satırda ve bir sütunda yalnızca bir kez bulunabilir. Ayrıca, çaprazlarda da hiçbir kraliçe bir diğerini tehdit etmemelidir. Amaç, N adet kraliçeyi, birbirlerini tehdit etmeyecek şekilde $N \times N$ boyutlarındaki bir tahtaya yerleştirmektir.
+
+\begin{enumerate}
+    \item İlk kraliçeyi ilk satıra yerleştir.
+    \item Sonraki kraliçeyi, bir önceki kraliçenin yerini tehdit etmeyen bir hücreye yerleştir.
+    \item Eğer geçerli bir çözüm yolu bulunmazsa, geri adım atarak önceki adımı değiştirmeye çalış.
+    \item Bütün kraliçeler yerleştirildiğinde çözüm bulunmuş olur.
+\end{enumerate}
+
+\begin{lstlisting}[language=Python]
+def n_queens(board, row):
+    n = len(board)
+    if row == n:
+        for i in range(n):
+            row = ["Q" if board[i] == j else "." for j in range(n)]
+            print(" ".join(row))
+        return True
+
+    for col in range(n):
+        is_safe = True
+        for i in range(row):
+            if board[i] == col:
+                is_safe = False
+    
+        for i, j in zip(range(row - 1, -1, -1), range(col - 1, -1, -1)):
+            if board[i] == j:
+                is_safe = False
+    
+        for i, j in zip(range(row - 1, -1, -1), range(col + 1, len(board))):
+            if board[i] == j:
+                is_safe = False
+
+        if is_safe:
+            board[row] = col
+            if n_queens(board, row + 1):
+                return True
+
+            board[row] = -1
+
+    return False
+
+board = [-1] * 4
+n_queens(board, 0)
+# . Q . .
+# . . . Q
+# Q . . .
+# . . Q .
+# True
+\end{lstlisting}
+
+\newpage

@@ -1,0 +1,459 @@
+\section{Tree Traversal}
+
+\subsection{Binary Search Tree (BST)}
+
+BST, düğümlerden oluşan bir ikili ağaç (binary tree) veri yapısıdır. Amacı, verilerin verimli bir şekilde aranmasını, eklenmesini ve silinmesini sağlamaktır. Her düğüm için solunda düğümler ondan (root node) küçük, sağındaki düğümler ondan büyük olmalıdır. Arama, ekleme ve silme işlemlerinin ortalama zaman karmaşıklığı $O(logn)$'dir. BST'nin performansı ağacın dengeli olup olmamasına bağlıdır. Dengeli ağaçlarda, (AVL Tree, Red-Black Tree) tüm işlemler optimal çalışır. Arama işleminde, belirli bir anahtarı (key) bulmak için kökten başlayarak, anahtar kök ile karşılaştırılır. Eğer aranan anahtar kökten küçükse sol alt ağaçta, büyükse sağ alt ağaçta, arama devam eder. Yeni bir düğüm eklenirken, düğüm doğru konuma yerleştirilene kadar kökten başlayarak karşılaştırmalar yapılır. Silme işlemi, silinecek düğümün yerinde bir yapı düzenlenmesi yapılmasını gerektirebilir. Üç olası durum vardır:
+
+\begin{itemize}
+    \item Yaprak düğüm (child'ı yok) silinir.
+    \item Tek child'ı olan düğüm silinir (child düğümü onun yerine geçer).
+    \item İki child'ı olan düğüm silinir (inorder predecessor veya inorder successor bulunur ve bu düğüm onun yerine geçer.)
+\end{itemize}
+
+Bir BST'nin düğümleri aşağıdaki kurallara göre yerleştirilir:
+
+\begin{itemize}
+    \item Sol alt ağaçtaki (left subtree) düğümler, kök düğümden küçük olmalıdır.
+    \item Sağ alt ağaçtaki (right subtree) düğümler, kök düğümden büyük olmalıdır.
+    \item Her alt ağaç, yine bir BST'dir, yani aynı kurallar alt ağaçlar için de geçerlidir.
+\end{itemize}
+
+Inorder Predecessor (Sıralı Önceki Düğüm), bir düğümün inorder traversal sırasına göre kendisinden hemen önce gelen düğümdür. Bu düğüm, bir düğümün sol alt ağacındaki en sağdaki düğümdür. Eğer düğümün sol alt ağacı varsa, predecessor bu sol alt ağaçtaki en büyük düğümdür (sol alt ağacın en sağdaki düğümü). Eğer düğümün sol alt ağacı yoksa, yukarı çıkarılarak bu düğümden daha küçük olan en yakın ebeveyn düğüm bulunur.
+
+\begin{lstlisting}[language=Python]
+#      20
+#     /  \
+#   10    30
+#  /  \
+# 5   15
+#      \
+#      17
+# 20'nin predecesorru'u 17'dir.
+\end{lstlisting}
+
+Inorder Successor (Sıralı Sonraki Düğüm), bir düğümün inorder traversal sırasına göre kendisinden hemen sonra gelen düğümdür. Bu düğüm, bir düğümün sağ alt ağacındaki en soldaki düğümdür. Eğer düğümün sağ alt ağacı varsa, successor bu sağ alt ağaçtaki en küçük düğümdür (sağ alt ağacın en soldaki düğümü). Eğer düğümün sağ alt ağacı yoksa, yukarı çıkarak bu düğümden daha büyük olan en yakın ebeveyn düğüm bulunur.
+
+\begin{lstlisting}[language=Python]
+#      20
+#     /  \
+#   10    30
+#  /  \
+# 5   15
+#      \
+#      17
+# 20'nin successor'u 30'dur.
+\end{lstlisting}
+
+\newpage
+
+\subsection{Binary Tree (İkili Ağaç)}
+
+Binary Tree, her bir düğümün en fazla iki alt düğüme sahip olduğu bir ağaç yapısıdır. Bu alt düğümler sol ve sağ olarak adlandırılır. Binary Tree, veriyi hiyerarşik bir düzende organize eder. Kök (root) düğüm, ağaç yapısındaki en üstteki düğümdür. Diğer tüm düğümler bu kök düğümden dallanır. Yaprak düğümler (leaf nodes) alt düğümleri olmayan düğümlerdir. Yani, hem sol hem de sağ alt düğümleri boştur. Alt ağaçlar, her bir düğüm kendi alt düğümleriyle birlikte bir alt ağaç oluşturabilir. Bu yapı rekürsif bir doğaya sahiptir. Kök düğüm, sıfırıncı düzeyde bulunur. Kök düğümden ne kadar aşağıya indikçe düzey sayısı o kadar artar. Her düzeyde düğüm sayısı, o düzeyin iki katıdır. Kök düğümden bir yaprak düğüme kadar olan yolun uzunluğudur. Ağacın en uzun yoluna "ağacın yüksekliği" denir. Dolaşma işlemleri:
+
+\begin{itemize}
+    \item \textbf{In-order Tree Traversal}: Sol, Kök, Sağ.
+    \item \textbf{Pre-order Tree Traversal}: Kök, Sol, Sağ.
+    \item \textbf{Post-order Tree Traversal}: Sol, Sağ, Kök.
+    \item \textbf{Level-order Tree Traversal}: Düzey düzey soldan sağa.
+\end{itemize}
+
+\newpage
+
+\subsubsection{In-Order Traversal (Kök Ortada Dolaşma)}
+
+Bu yöntemde önce sol alt ağaç, ardından kök düğüm, en sonunda ise sağ alt ağaç dolaşılır. Eğer ağaç bir Binary Search Tree (BST) ise, in-order dolaşma işlemi ağacın düğümlerini küçükten büyüğe sıralı olarak verir.
+
+\begin{lstlisting}[language=Python]
+def in_order(self, node):
+    if node:
+        self.in_order(node.left)
+        print(node.data, end=" ")
+        self.in_order(node.right)
+
+#     4
+#    / \
+#   2   5
+#  / \
+# 1   3
+# In-order: 1, 2, 3, 4, 5
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Pre-Order Traversal (Kök Başta Dolaşma)}
+
+Bu yöntemde önce kök düğüm, ardından sol alt ağaç, son olarak sağ alt ağaç dolaşılır. Pre-order traversal, ağaç yapısını kopyalamak veya ağacı yeniden oluşturmak için kullanılır.
+
+\begin{lstlisting}[language=Python]
+def pre_order(self, node):
+    if node:
+        print(node.data, end=" ")
+        self.pre_order(node.left)
+        self.pre_order(node.right)
+
+#     4
+#    / \
+#   2   5
+#  / \
+# 1   3
+# Pre-order: 4, 2, 1, 3, 5
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Post-Order Traversal (Kök Sonda Dolaşma)}
+
+Bu yöntemde önce sol alt ağaç, sonra sağ alt ağaç, en sonunda kök düğüm dolaşılır. Post-order dolaşma, düğümleri silme gibi kök düğümün en son işlendiği durumlarda kullanılır.
+
+\begin{lstlisting}[language=Python]
+def post_order(self, node):
+    if node:
+        self.post_order(node.left)
+        self.post_order(node.right)
+        print(node.data, end=" ")
+
+#     4
+#    / \
+#   2   5
+#  / \
+# 1   3
+# Post-order: 1, 3, 2, 5, 4
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Level-Order Traversal (Düzey Düzey Dolaşma)}
+
+Bu yöntemde, düğümler ağaçtaki düzeylerine (katmanlarına) göre sırayla dolaşılır. İlk önce kök düğüm, ardından birinci düzeydeki düğümler, sonra ikinci düzeydeki düğümler ziyaret edilir. Breadth-First Search (Genişlik Öncelikli Arama) olarak da bilinir. Dolaşma işlemi bir kuyruk (queue) kullanılarak gerçekleştirilir.
+
+\begin{lstlisting}[language=Python]
+def levelOrderTraversal(self):
+    if self.root is None:
+        return
+
+    queue = [self.root]
+    while queue:
+        current_node = queue.pop(0)
+        print(current_node.data, end=" ")
+        if current_node.left:
+            queue.append(current_node.left)
+        if current_node.right:
+            queue.append(current_node.right)
+
+    print()
+
+#     4
+#    / \
+#   2   5
+#  / \
+# 1   3
+# Level-order: 4, 2, 5, 1, 3
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Zigzag Tree Traversal (Spiral Order Traversal)}
+
+Zigzag Traversal, aynı Level-order Traversal gibi, ağacı katmanlar halinde dolaşır ancak her seviye için sırayla sola ve sağa doğru giderek yön değiştirir. Bu nedenle, bir seviye sola doğru, bir sonraki seviye sağa doğru dolaşır. İlk seviyede (root seviyesi) soldan sağa gider. İkinci seviyede sağdan sola gider. Üçüncü seviyede tekrar soldan sağa gider. Bu süreç her seviyede değişerek devam eder.
+
+\begin{lstlisting}[language=Python]
+def zigzagTraversal(root):
+    if root is None:
+        return []
+    
+    current_level = [root]
+    left_to_right = True
+    result = []
+    
+    while current_level:
+        level_values = []
+        next_level = []
+        
+        for node in current_level:
+            level_values.append(node.data)
+            if node.left:
+                next_level.append(node.left)
+            if node.right:
+                next_level.append(node.right)
+        
+        if not left_to_right:
+            level_values.reverse()
+        
+        result.extend(level_values)
+        current_level = next_level
+        left_to_right = not left_to_right
+    
+    return result
+
+#      4
+#    /   \
+#   2     5
+#  / \   / \
+# 1   3 6   7
+# Zigzag: 4, 5, 2, 1, 3, 6, 7
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Boundary Tree Traversal}
+
+Boundary Traversal, bir binary ağacın sınırında bulunan düğümleri dolaşır. Bu gezinim türü, ağacın sol sınırındaki, yaprak düğümleri ve sağ sınırındaki düğümleri içerir. Amacı, bir binary tree'nin dış hatlarını oluşturan düğümleri dolaşmaktır. 
+
+\begin{lstlisting}[language=Python]
+#      4
+#    /   \
+#   2     5
+#  / \   / \
+# 1   3 6   7
+# Boundary: 4, 2, 1, 6, 5
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Diagonal Tree Traversal}
+
+Diagonal Traversal, bir binary tree'deki düğümleri eğik hatlar boyunca dolaşır. Her eğik hat, root’tan başlayarak sağ alt düğümlere doğru iner. Bir diğer ifadeyle, bir düğümden sağ alt dallara doğru gidildikçe düğümler aynı eğik hat üzerinde yer alır. Sol çocuk düğümler, bir alt diyagonale geçer. Root ile başlanır ve root'u birinci diyagonalde kabul edilir. Root'un sağındaki düğümler aynı diyagonal üzerinde olur. Solundaki düğümler bir sonraki diyagonale taşınır. Bu şekilde tüm düğümler diyagonal olarak gruplanır ve her diyagonal bir seviye gibi kabul edilir.
+
+\begin{lstlisting}[language=Python]
+from collections import defaultdict
+
+def diagonalTraversal(root):
+    if root is None:
+        return []
+
+    diagonal_map = defaultdict(list)
+    queue = deque([(root, 0)])
+    while queue:
+        node, d = queue.popleft()
+        diagonal_map[d].append(node.data)
+        if node.left:
+            queue.append((node.left, d + 1))
+
+        if node.right:
+            queue.append((node.right, d))
+
+        result = []
+        for elements in diagonal_map.values():
+            result.extend(elements)
+
+    return result
+
+#      4
+#    /   \
+#   2     5
+#  / \     \
+# 1   3     6
+# Boundary: 4, 5, 6, 2, 3, 1
+\end{lstlisting}
+
+\newpage
+
+\subsection{AVL Tree}
+
+AVL Tree (Adelson-Vensky veya Landis Tre), 1962 yılında G. M. Adelson-Vensky ve E. M. Landis tarafında geliştirilen, dengeli bir ikili arama ağacıdır. BST yapısında düğümlerin belirli bir düzeni olmadığı için, ekleme silme işlemleri sonrasında ağaç dengesiz hale gelebilir. AVL ağaçları bu denge sorununu çözmek için geliştirilmiştir ve her düğümde yükseklik farkını kontrol ederek ağacın dengede kalmasını sağlar. Her düğüm için, sol alt ağaç ve sağ alt ağacın yüksekliği arasındaki fark en fazla 1 olabilir. Bu fark, denge faktörü (balance factor) olarak adlandırılır ve her düğüm için hesaplanır.
+
+\[ \text{Balance Factor} = \text{Left Subtree Height} - \text{Right Subtree Height} \]
+
+Eğer bu denge faktörü -1, 0 veya 1 ise, ağaç dengelidir (balanced tree). Eğer bu denge faktörü -1 ile 1 aralığının dışına çıkarsa dengeleme (rebalance) işlemi yapılır. Her ekleme veya silme işlemi sonrasında, AVL ağacının dengesi bozulabilir. Bu durumda, dengeleme için rotasyon işlemleri uygulanır:
+
+\begin{itemize}
+    \item \textbf{Single Rotation}: Right Rotation, Left Rotation.
+    \item \textbf{Double Rotation}: Right-Left Rotation, Left-Right Rotation.
+\end{itemize}
+
+Burada:
+
+\begin{itemize}
+    \item \textbf{Right Rotation}: Sol alt ağaç daha uzun olduğunda uygulanır. Sol alt ağacın kökü, ana düğüm ile yer değiştirir.
+    \item \textbf{Left Rotation}: Sağ alt ağaç daha uzun olduğunda uygulanır. Sağ alt ağacın kökü, ana düğüm ile yer değiştirir.
+\end{itemize}
+
+AVL ağacının en önemli avantajlarından biri, $O(logn)$ zaman karmaşıklığını garanti etmesidir. Ekleme, silme ve arama işlemleri için en kötü durumda bile bu karmaşıklık korunur. Dengeli yapı sayesinde bu zaman karmaşıklığı sağlanır, çünkü ağacın yüksekliği her zaman $O(logn)$ seviyesindedir.
+
+\newpage
+
+\subsection{Red-Black Tree}
+
+Red-Black Tree, dengeli bir ikili arama ağacıdır. Bu ağaç yapısı, veri ekleme, silme ve arama işlemlerinin zaman karmaşıklığını olabildiğince düşük tutarak performansı iyileştirir. Herhangi bir işlemde en kötü durumda bile $O(logn)$ zaman karmaşıklığı sunar. Her düğüm ya kırmızı ya da siyah renklidir. Kök düğüm (root) her zaman siyah renktedi.r Her yaprak düğüm siyah olarak kabul edilir. Aslında bu yapraklar "NIL" olarak adlandırılan özel düğümlerle temsil edilir ve veri içermezler. Bir kırmızı düğümün iki çocuğu da mutlaka siyah olmak zorundadır. Bu özellik, ağacın fazla eğilmesini ve dengesiz büyümesini engeller, yani ardışık iki kırmızı düğüm bulunmaz. Herhangi bir düğümden başlayarak bir yaparak düğüme kadar olan her yolda aynı sayıda siyah düğüm bulunmak zorundadır. Bu özellik ağacın dengeli kalmasını sağlar. Java'da TreeMap ve TreeSet sınıflarının temel veri yapısı Red-Black Tree'dir. Linux çekirdeğinde zamanlayıcılar ve dosya sistemleri Red-Black Tree kullanır.
+
+\newpage
+
+\subsection{Segment Tree}
+
+Segment Tree, dizinin her aralığı için hesaplanan bir özet değer (toplam, minimum, vb.) tutan bir ikili ağaçtır. Bu ağacın yapısı, diziyi daha küçük parçalara bölerek (alt ağaçlara ayırarak) çalışır. Aralıklı sorgular (range queries) ve güncellemeler (updates) ile ilgilenir. Belirli bir aralık için hesaplama yapılmasını sağlar. Tree, bir dizide yapılan güncellemeleri dinamik olarak işlemenizi sağlar. Bu, dizi elemanlarının değerleri değişse bile aralıklı sorguların güncel sonuçlar vermesini sağlar.
+
+Segment Tree, verilen diziyi alır ve her düğümde bir aralıkla ilgili bilgi tutar. Yaprak düğümler (leaf nodes), dizinin birebir elemanlarını temsil eder. İç düğümler (internal nodes), bu yaprak düğümlerden gelen bilgilerin birleştirilmesiyle oluşturulur. Bir aralıkta işlem yapmak için Segment Tree, ilgili aralıkları kapsayan düğümler üzerinden hesaplama yapar.Bu işlem, ağacın yukarıdan aşağıya doğru bölünmesiyle $O(logn)$ sürede gerçekleşir. Bir dizi elemanını güncellemek gerektiğinde, Segment Tree bu elemanın ait olduğu yaprak düğümü ve bu düğümün bağlı olduğu iç düğümleri günceller. Bu işlem de $O(logn)$ sürede yapılır.
+
+\begin{lstlisting}[language=Python]
+class SegmentTree:
+    def __init__(self, data):
+        self.n = len(data)
+        self.tree = [0] * (2 * self.n)
+
+        for i in range(self.n):
+            self.tree[self.n + i] = data[i]
+
+        for i in range(self.n - 1, 0, -1):
+            self.tree[i] = self.tree[2 * i] + self.tree[2 * i + 1]
+
+    def update(self, idx, value):
+        idx += self.n
+        self.tree[idx] = value
+        while idx > 1:
+            idx //= 2
+            self.tree[idx] = self.tree[2 * idx] + self.tree[2 * idx + 1]
+
+    def range_query(self, l, r):
+        l += self.n
+        r += self.n
+        sum_val = 0
+        while l < r:
+            if l % 2 == 1:
+                sum_val += self.tree[l]
+                l += 1
+
+            if r % 2 == 1:
+                r -= 1
+                sum_val += self.tree[r]
+
+            l //= 2
+            r //= 2
+        return sum_val
+
+#      16
+#    /    \
+#   4      12
+#  / \    / \
+# 1   3  5   7
+# Tree: [1, 3, 5, 7]
+\end{lstlisting}
+
+\newpage
+
+\subsection{Fenwick Tree (Binary Index Tree)}
+
+Fenwick Tree, belirli türde veri işlemlerini hızlı bir şekilde gerçekleştirmek amacıyla kullanılan bir veri yapısıdır. Kümülatif toplam (prefix sum) ve dizi güncellemeleri gibi işlemlerde kullanılır ve bu işlemleri verimli hale getirir. Hem güncelleme hem de toplam hesaplama işlemleri $O(logn)$ zaman karmaşıklığına sahiptir. Fenwick Tree'nin ana mantığı, dizinlerin en sağdaki 1 bit'i ile temsil edilen aralıkların toplamlarını tutmaktır. Bu sayede her güncelleme ve sorgu işlemi sadece bu bit ile ilgili elemanları günceller. Dizinin $[1, 2, 3, 4, 5]$ olduğu bir durumda, Fenwick ağacı şu şekilde tutulur:
+
+\begin{itemize}
+    \item $\text{tree}[1]$: Dizinin sadece ilk elemanını (1) tutar.
+    \item $\text{tree}[2]$: İlk iki elemanı (1 + 2) tutar.
+    \item $\text{tree}[3]$: Üçüncü elemanı (3) tutar.
+    \item $\text{tree}[4]$: İlk dört elemanın toplamını (1 + 2 + 3 + 4) tutar.
+    \item $\text{tree}[5]$: Beşinci elemanı (5) tutar.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+class FenwickTree:
+    def __init__(self, data):
+        self.n = len(data) - 1
+        self.tree = [0] * (self.n + 1)
+
+    def update(self, index, value):
+        while index <= self.n:
+            self.tree[index] += value
+            index += index & -index
+
+    def prefix_sum(self, index):
+        total = 0
+        while index > 0:
+            total += self.tree[index]
+            index -= index & -index
+
+        return total
+
+    def range_sum(self, left, right):
+        return self.prefix_sum(right) - self.prefix_sum(left - 1)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Full Binary Tree}
+
+Bir Full Binary Tree (Tam İkili Ağaç), her bir düğümün ya sıfır ya da tam iki alt düğüme sahip olduğu özel bir ikili ağaç türüdür. Bu tür bir ağaçta düğümler ya yapraktır (yani alt düğümü yoktur) ya da tam olarak iki alt düğümü vardır. Full Binary Tree, binary tree çeşitleri içinde sıkça kullanılan bir yapıdır ve belirli özellikleri nedeniyle algoritmalarda ve veri yapılarında önemli bir rol oynar. Bir düğüm ya yaprak düğüm olur (alt düğümü yoktur) ya da tam olarak iki alt düğümü olur. Hiçbir düğüm bir alt düğüme sahip olamaz. Full Binary Tree'de yaprak düğüm sayısı her zaman iç düğüm sayısının bir fazlasıdır. Eğer bir ağaçta $I$ adet iç düğüm varsa, bu ağacın $I+1$ adet yaprak düğümü olur. Tam $n$ yüksekliğindeki bir Full Binary Tree, maksimum $2^{n+1} - 1$ düğüme sahip olabilir. Eğer ağaç $n$ seviyesine sahipse, maksimum yüksekliği $n-1$ olur. Her seviye, üst seviyeler dolana kadar düğümlerler doldurulur. Complete Binary Tree'de her seviye son seviye hariç tamamen doludur ve düğümler sola doğru sıralanmıştır. Full Binary Tree'de ise sadece düğümler ya iki çocuğa sahiptir ya da yaprak düğümdür. Full Binary Tree'yi bir dizi ile temsil etmek mümkündür. Kök düğüm dizinin ilk elemanında (indeks 0) yer alır. Bir düğümün sol çocuğu dizideki $2i+1$, sağ çocuğu ise $2i+2$ indekslerinde yer alır.
+
+\begin{lstlisting}[language=Python]
+#      1
+#    /   \
+#   2     3
+#  / \  
+# 4   5 
+\end{lstlisting}
+
+\newpage
+
+\subsection{Perfect Binary Tree}
+
+Bir perfect binary tree, her seviyedeki tüm düğümlerin tamamen dolu olduğu bir ikili ağaçtır. Bu, her iç düğümün tam olarak iki çocuğa sahip olduğu ve tüm yaprak düğümlerin aynı seviyede olduğu anlamına gelir.  Tüm yaprak düğümleri ağacın en alt seviyesinde yer alır. Yani ağacın en son seviyesinde herhangi bir eksiklik veya boşluk olmaz. Seviye sayısı $h$ olan bir perfect binary tree, toplamda $2^h - 1$ düğüme sahiptir. Yaprak düğüm sayısı ise $2^{h-1}$ formülü ile hesaplanır. Perfect binary tree her zaman dengelidir, çünkü her iki alt ağaç da eşit sayıda seviyeye sahiptir ve tüm yapraklar aynı seviyededir.
+
+\begin{lstlisting}[language=Python]
+#      10
+#    /    \
+#   4      6
+#  / \    / \
+# 1   3  5   7
+\end{lstlisting}
+
+\newpage
+
+\subsection{Complete Binary Tree}
+
+Complete Binary Tree (Tam İkili Ağaç), ikili ağaçların özel bir türüdür. Temel özelliklerinden biri, ağacın seviyelerinin (katmanlarının) tamamen dolu olmasıdır, ancak bu özellik sadece en alt seviyede (son katmanda) esneklik gösterir. Ağacın tüm seviyeleri, son seviye hariç tamamen doludur.  Son seviyedeki düğümler (nodelar) olabildiğince sola yerleştirilir. Bu da son seviyede boş düğümler varsa sadece sağ tarafta bulunabileceği anlamına gelir. Bir tam ikili ağacın yüksekliği (en üstten en alta kadar olan seviye sayısı), $\text{log}_2(n)$ civarındadır. Burada $n$, düğüm sayısını temsil eder. Eğer ağacın yüksekliği $h$ ise, minimum $2^h$ düğüm, maksimum ise $2^{h+1} - 1$ düğüm bulunabilir.
+
+\begin{lstlisting}[language=Python]
+#      16
+#    /    \
+#   4      12
+#  / \    /
+# 1   3  5
+\end{lstlisting}
+
+\newpage
+
+\subsection{B-Tree (Balanced Tree)}
+
+B-Tree (Balanced Tree), bir tür kendini dengede tutan, çok seviyeli bir ağaç veri yapısıdır. B-Tree, düğümlerinin belli sayıda çocukları olabileceği şekilde yapılandırılır ve her zaman dengede kalacak şekilde güncellenir. Bu denge özelliği sayesinde, veriler arasında arama, ekleme, silme gibi işlemler her zaman belirli bir zaman karmaşıklığında gerçekleştirilir. Her düğüm, $t$ düzeni ile tanımlanır ve bir düğüm en az $t-1$ ve en fazla $2t-1$ anahtar barındırabilir. Bir düğümde en az $t$, en fazla $2t$ çocuk bulunabilir.
+
+\begin{lstlisting}[language=Python]
+#      1
+#    /   \
+#   2     3
+#  / \  
+# 4   5 
+\end{lstlisting}
+
+\newpage
+
+\subsection{B+ Tree}
+
+B+ Tree, dengeli bir arama ağacı olup, verilerin sıralı bir şekilde depolanmasını ve bu verilere hızlı erişimi sağlar. Diğer ağaç türlerinden farklı olarak, B+ Tree tüm verileri yaprak düğümlerde (leaf nodes) tutar ve dahili düğümler yalnızca yönlendirme (index) amaçlı kullanılır. İç düğümler yalnızca yönlendirme bilgilerini içerir ve yaprak düğümlerdeki veriler arasında köprü görevi görür. İç düğümler veriyi saklamaz, sadece alt düğümlere referans verir. Tüm gerçek veri yaprak düğümlerde saklanır. Yaprak düğümler birbirine bağlı olabilir, bu sayede sırayla veri okuma veya sıralama işlemleri hızlı bir şekilde yapılabilir.
+
+\newpage
+
+\subsection{Spanning Tree}
+
+Spanning tree, bir graf üzerindeki tüm düğümleri (vertex) içeren, fakat dönüşüm (loop) içermeyen, bağlantılı bir alt grafiktir. Verilen bir grafın minimum sayıda kenar ile tüm düğümlere ulaşılmasını sağlayan bir alt graf oluşturur. Spanning tree, sadece düğümleri bağlar ve bu nedenle döngü içermez, ancak tüm düğümlere bir yol sağlar. Eğer grafın $n$ düğümü varsa, spanning tree'de tam olarak $n-1$ kenar bulunur. Bu, minimum sayıda kenar ile tüm düğümler arasındaki bağlantıyı sağlar.  Aynı graf için birden fazla spanning tree olabilir. Özellikle, eğer grafda kenarların farklı ağırlıkları yoksa, birden fazla spanning tree seçilebilir. Eğer her kenarın bir ağırlığı varsa, bu ağırlıklara göre minimum spanning tree (MST) bulunabilir. Bu, ağın en düşük maliyetle bağlanmasını sağlar. Bu tür algoritmalar örneğin Kruskal ve Prim algoritmaları ile çözülür.
+
+\begin{lstlisting}[language=Python]
+#      A
+#    /   \
+#   B  -  C 
+
+# Spanning Tree 1
+#      A
+#    /
+#   B  -  C 
+
+# Spanning Tree 2
+#      A
+#        \
+#   B  -  C 
+
+# Spanning Tree 3
+#      A
+#    /   \
+#   B     C 
+\end{lstlisting}
+
+\newpage

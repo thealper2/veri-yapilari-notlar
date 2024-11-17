@@ -1,0 +1,154 @@
+\section{List (Liste)}
+
+List, birden fazla öğeyi tek bir değişken altında saklayabilen veri yapısıdır. Elemanlar, belirli bir sıraya göre saklanır ve her elemanın bir indeksi vardır. Bu indeksleme sayesinde elemanlara kolayca erişilebilir. Listeler eklenme sırasına göre sıralıdır. Yani, ilk eklenen eleman sıfırıncı indekse, ikinci eklenen eleman birinci indekse yerleşir. Listelerdeki elemanlar, liste oluşturulduktan sonra değiştirilebilir yani mutable. Yeni elemanlar eklenebilir veya mevcut elemanlar silinebilir. Listeler, farklı veri türlerinden elemanlar içerebilir. Listelerin boyutu, eleman ekleme veya çıkarma işlemlerine göre dinamik olarak değişebilir. Bellek yönetimi, bu ekleme ve silme işlemleri sırasında otomatik olarak yapılır. Listeler, diğer listeleri veya karmaşık nesneleri içerebilir. Bu, iç içe listelerin oluşturulmasına olanak tanır.
+
+Listeler, bellekte bitişik alanlar (contiguous memory locations) olarak saklanır. Her eleman, bir bellek adresinde depolanır ve listenin başlangıç adresi ile birlikte bir gösterici kullanılarak elemanlara erişim sağlanır. Bellek yönetimi, liste boyutu değiştiğinde dinamik olarak ayarlanır:
+
+\begin{itemize}
+    \item \textbf{Ekleme}: Eleman eklendiğinde, mevcut bellek alanı yeterli değilse, daha büyük bir bellek bloğu tahsis edilir, elemanlar bu yeni alanın içine kopyalanır ve eski bellek alanı serbest bırakılır.
+    \item \textbf{Silme}: Eleman silindiğinde, bellek alanı serbest bırakılır ve ihtiyaç duyulduğunda bu alan yeniden kullanılabilir.
+\end{itemize}
+
+\subsection{Erişim (Access)}
+
+List'deki bir elemana erişmek, elemanın index numarasını kullanarak doğrudan yapılır. Erişim süresi, liste boyutuna bağlı değildir, çünkü liste elemanları bellekte ardışık olarak depolanaır. Bu yüzden zaman karmaşıklığı $O(1)$'dir.
+
+\subsubsection{Python - Indexing}
+
+\begin{lstlisting}[language=Python]
+arr = [1, 2, 3]
+arr[2]
+\end{lstlisting}
+
+\subsection{Arama (Search)}
+
+Doğrusal arama, List'deki her elemanı sırayla kontrol eder. En kötü durumda, aranan eleman listenin sonunda yer alır. Zaman karmaşıklığı $O(n)$'dir.
+
+\subsubsection{Python - Linear Search}
+
+\begin{lstlisting}[language=Python]
+def linear_search(arr, target):
+    for i in range(len(arr)):
+        if arr[i] == target:
+            return i
+    return -1
+\end{lstlisting}
+
+\subsection{Ekleme (Insertion)}
+
+List'e yeni bir eleman eklemek, mevcut boyutunu aşmıyorsa List'ın sonuna eklenebilir. Ancak, belirli bir pozisyona eklemek isteniyorsa, o pozisyondan itibaren tüm elemanlar bir pozisyon kaydırılmalıdır. Sonuna ekleme işleminde; eğer listenin boyutu yeterliyse, yeni eleman listenin sonuna eklenir. listenin sonuna eleman eklemek hızlıdır. Zaman karmaşıklığı $O(1)$'dir. Belirli bir pozisyona ekleme işleminde; eleman eklemek istenilen pozisyondan itibaren tüm elemanların kaydırılması gerekir. En kötü durumda, elemanın eklenmesi gereken pozisyon listenin başıysa tüm elemanlar kaydırılmak zorundadır. Zaman karmaşıklığı $O(n)$'dir.
+
+\subsubsection{Python - Append}
+
+\begin{lstlisting}[language=Python]
+arr = [1, 2, 3]
+arr.append(4)
+\end{lstlisting}
+
+\subsubsection{Python - Insert}
+
+\begin{lstlisting}[language=Python]
+arr = [1, 2, 3]
+new_element = 25
+position = 1
+arr = arr[:position] + [new_element] + arr[position:]
+\end{lstlisting}
+
+\subsection{Silme (Deletion)}
+
+List'den bir elemanı silmek için silinecek elemanın yeri bilinmelidir. Silenen elemanın yerine null veya başka bir değer koyulur. Silme işleminden sonra, elemanın ardından gelen tüm elemanlar bir pozisyon kaydırılmalıdır. Eğer sondeki eleman silinecekse; sadece o eleman kaldırılmalıdır. liste sonundaki elemanı silmek hızlıdır. Zaman karmaşıklığı $O(1)$'dir. Eğer belirli bir eleman silinecekse; diğer elemanlar kaydırılmalıdır. En kötü durumda, silinmesi gereken eleman listenin başındaysa tüm elemanlar kaydırılmak zorundadır. Zaman karmaşıklığı $O(n)$'dir.
+
+\subsubsection{Python - Pop}
+
+\begin{lstlisting}[language=Python]
+arr = [1, 2, 3]
+arr.pop()
+\end{lstlisting}
+
+\subsubsection{Python - Remove}
+
+\begin{lstlisting}[language=Python]
+arr = [1, 2, 3]
+arr.remove(0)
+\end{lstlisting}
+
+\subsection{Python "List" Kütüphanesi}
+
+\begin{itemize}
+    \item \textbf{append()}: Sonuna ekleme.
+    \item \textbf{insert()}: Belirtilen nesneyi belirtilen indekse ekleme.
+    \item \textbf{extend()}: Bir Listi başka bir Listin sonuna ekleyerek birleştirme.
+    \item \textbf{pop()}: Sondan eleman silme.
+    \item \textbf{index()}: Belirtilen indeksteki elemanı döndürür.
+    \item \textbf{reverse()}: List'i ters çevirme.
+    \item \textbf{count()}: Belirtilen elemanın List içindeki kaç kere geçtiği.
+    \item \textbf{copy()}: Liste nesnesini başka bir değişkene kopyalar.
+\end{itemize}
+
+\begin{lstlisting}[language=Python]
+### create an list
+arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+arr
+# [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+### indexing
+arr[1]
+# 2
+arr[1:5]
+# [2, 3, 4, 5]
+arr[::-1]
+# [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+arr[:-1]
+# [1, 2, 3, 4, 5, 6, 7, 8, 9]
+arr[-1]
+# 10
+
+### append() method
+arr.append(11)
+arr
+# [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+
+### insert() method
+arr.insert(0, 0)
+arr
+# [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+
+### extend() method
+arr.extend([12, 13, 14, 15])
+arr
+# [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+
+### remove() method
+arr.remove(0)
+arr
+# [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+
+### pop() method
+arr.pop()
+arr
+# [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+
+### index() method
+arr.index(4)
+# 3
+
+### reverse() method
+arr.reverse()
+arr
+# [16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+
+### buffer_info() method
+arr.buffer_info()
+# (140445740545920, 16)
+
+### count() method
+arr.count(10)
+# 1
+
+### copy() method
+arr2 = arr.copy()
+arr2
+# [14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+\end{lstlisting}
+
+\newpage

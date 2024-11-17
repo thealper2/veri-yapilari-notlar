@@ -1,0 +1,234 @@
+\section{Object Oriented Programming (OOP) Concepts}
+
+\subsection{Encapsulation (Kapsülleme)}
+
+Nesnelerin iç yapısını gizleyerek yalnızca belirli bir arayüz aracılığıyla etkileşim kurmasına izin verir. Kapsülleme, verinin korunması, güzelliğin artırılması ve bakımın kolaylaştırılması gibi avantajlar sağlar. Nesne içindeki verilere doğrudan erişim sınırlanır. Dışarıdan yalnızca belirli metodlar aracılığıyla verilere ulaşılabilir. Bu, nesne içinde tutulan bilgilerin yanlış kullanımdan korunmasına yardımcı olur. Kapsülleme ile veriye erişim ve değişim işlemleri için özel metodlar (getter ve setter) tanımlanabilir. Bu metodlar, verinin okunmasını ve değiştirilmesini kontrol ederek ek işlevsellik ekleyebilir. Kapsülleme, nesnelerin belirli bir sorumluluğa sahip olmasını sağlar. Her nesne, kendi verilerini ve işlevselliğini içerecek şekilde tasarlanır, bu da kodun daha anlaşılır ve düzenli olmasını sağlar. Kapsülleme, nesnelerin bağımsız olarak yeniden kullanılmasına olanak tanır. Bir nesne, başka bir projede veya uygulamada kolayca kullanılabilir. Kapsülleme ile karmaşık sistemlerin basitleştirilmesi mümkün olur. Kullanıcılar, nesnelerin iç yapısını bilmeden yalnızca arayüzleri üzerinden etkileşimde bulunabilir. 
+
+\subsubsection{Python - Encapsulation}
+
+\begin{lstlisting}[language=Python]
+class BankAccount:
+    def __init__(self, balance):
+        self.__balance = balance # Private
+    def deposit(self, amount):
+        if amount > 0:
+            self.__balance += amount
+            print(f"{amount} TL yatirildi.")
+        else:
+            print("Gecersiz tutar.")
+    def withdraw(self, amount):
+        if 0 < amount <= self.__balance:
+            self.__balance -= amount
+            print(f"{amount} TL cekildi.")
+        else:
+            print("Yetersiz bakiye veya gecersiz tutar.")
+    def get_balance(self):
+        return self.__balance
+
+account = BankAccount(5000)
+account.deposit(500) # 500 TL yatirildi.
+account.withdraw(200) # 200 TL cekildi.
+print(f"Mevcut bakiye: {account.get_balance()} TL") # 5300 TL
+\end{lstlisting}
+
+\newpage
+
+\subsection{Inheritance (Kalıtım)}
+
+Kalıtım, bir sınıfın özelliklerini ve metodlarını başka bir sınıfa aktarmasına olanak tanır. Kalıtım, kodun yeniden kullanılabilirliğini artırır. Kalıtım, sınıflar arasında bir hiyerarşi oluşturur. Üst sınıf (superclass veya base class) genel özellikleri tanımlarken, alt sınıf (subclass veya derived class) daha özel özellikleri tanımlar. Kalıtım, polimorfizmi (çok biçimlilik) destekler. Alt sınıflar, üst sınıfların metodlarını geçersiz kılabilir (override) ve böylece farklı davranışlar sergileyebilir. Kalıtımda, sınıfların erişim belirleyicileri (public, protected, private) belirli kurallar dahilinde miras alınabilir. Örneğin, protected olan bir özellik alt sınıflar tarafından erişilebilirken, private olan bir özellik sadece üst sınıf içinde kullanılabilir. Kalıtım, sınıfların tek bir sorumluluğa sahip olmasını teşvik eder. Üst sınıf genel bir işlevsellik sağlarken, alt sınıflar bu işlevselliği özelleştirebilir.
+
+\subsubsection{Python - Inheritance}
+
+\begin{lstlisting}[language=Python]
+class Animal:
+    def speak(self):
+        return "Hi!."
+
+class Cat(Animal):
+    def speak(self):
+        return "Meow!"
+
+class Dog(Animal):
+    def speak(self):
+        return "Woof!"
+
+animal = Animal()
+cat = Cat()
+dog = Dog()
+
+print(animal.speak()) # Hi!
+print(cat.speak()) # Meow!
+print(dog.speak()) # Woof!
+\end{lstlisting}
+
+\newpage
+
+\subsection{Polymorphism (Çok Biçimlilik)}
+
+Polymorphism, nesne yönelimli programlamada (OOP) bir nesnenin farklı biçimlerde davranabilmesini sağlayan bir konsepttir. Temel olarak, aynı arayüzü paylaşan farklı sınıflar tarafından uygulanan metotların farklı davranışlar sergilemesine olanak tanır. Polymorphism, iki ana türde karşımıza çıkar:
+
+\begin{itemize}
+    \item \textbf{Compile-time Polymorphism (Derleme Zamanı Çok Biçimliliği)}: Metot aşırı yükleme (method overloading) ve operatör aşırı yüklemesi (operator overloading) ile sağlanır. Derleme sırasında hangi metot veya operatörün çağrılacağı belirlenir.
+    \item \textbf{Runtime Polymorphism (Çalışma Zamanı Çok Biçimliliği)}: Alt sınıflar arasında yöntem geçersiz kılma (method overriding) ile sağlanır. Çalışma zamanında, hangi alt sınıfın metotunun çağrılacağı belirlenir.
+\end{itemize}
+
+\subsubsection{Python - Polymorphism}
+
+\begin{lstlisting}[language=Python]
+class Animal:
+    def speak(self):
+        raise NotImplementedError("Subclasses must implement this method.")
+
+class Cat(Animal):
+    def speak(self):
+        return "Meow!"
+
+class Dog(Animal):
+    def speak(self):
+        return "Woof!"
+
+def animal_sound(animal):
+    print(animal.speak())
+
+dog = Dog()
+cat = Cat()
+
+animal_sound(dog) # Woof!
+animal_sound(cat) # Meow!
+\end{lstlisting}
+
+\newpage
+
+\subsection{Abstraction (Soyutlama)}
+
+Abstraction (Soyutlama), nesne yönelimli programlamada (OOP) karmaşık sistemlerin daha basit ve yönetilebilir hale getirilmesi için kullanılan temel bir konsepttir. Soyutlama, bir nesnenin dışarıdan görünen özelliklerini ve işlevlerini vurgularken, iç detayları gizler. Bu, programcıların ve kullanıcıların sadece önemli bilgilere odaklanmasını sağlar ve karmaşık sistemlerin daha anlaşılır hale gelmesine yardımcı olur. Soyutlama, nesnelerin iç işleyişini gizler. Kullanıcı, nesnenin nasıl çalıştığını bilmeden sadece sunduğu arayüzle etkileşimde bulunur. Soyutlama, bir nesnenin genel bir formunu oluşturarak, bu formu diğer nesnelerde yeniden kullanabilme imkanı sunar. Bu, kodun tekrarlanmasını azaltır ve bakımını kolaylaştırır. Abstraction, kodu modüler hale getirir. Bu sayede, farklı modüller arasında daha az bağımlılık olur ve değişiklikler daha kolay yapılabilir. Soyutlama, polimorfizm ile birlikte çalışarak, aynı arayüzü paylaşan farklı nesnelerin farklı şekillerde davranmasını sağlar.
+
+\subsubsection{Python - Abstraction}
+
+\begin{lstlisting}[language=Python]
+from abc import ABC, abstractmethod
+
+class Vehicle(ABC):
+    @abstractmethod
+    def start_engine(self):
+        pass
+
+class Car(Vehicle):
+    def start_engine(self):
+        print("The car engine is started.")
+
+class Motorcycle(Vehicle):
+    def start_engine(self):
+        print("The motorcycle engine is started.")
+
+def start_vehicle(vehicle: Vehicle):
+    vehicle.start_engine()
+
+car = Car()
+motorcycle = Motorcycle()
+
+start_vehicle(car) # "The car engine is started."
+start_vehicle(motorcycle) # "The motorcycle engine is started."
+\end{lstlisting}
+
+\newpage
+
+\subsection{Association (Birlik)}
+
+Association, nesne yönelimli programlama (OOP) kavramlarından biridir ve nesneler arasında kurulan bir ilişkiyi ifade eder. Bu ilişki, bir nesnenin diğer bir nesneyle olan bağlantısını gösterir. Örneğin, bir "Öğrenci" nesnesi ile bir "Kurs" nesnesi arasındaki ilişki bir association örneğidir. Burada bir öğrenci bir veya birden fazla kursta bulunabilir, aynı zamanda bir kurs bir veya daha fazla öğrenciyi içerebilir. Association, nesneler arasında zayıf bir bağlantı oluşturur. Yani, bir nesne diğerine bağlıdır ama bağlı olduğu nesne olmadan da varlığını sürdürebilir. Association, yönlendirilmiş (bir nesne diğerine bağlı) veya yönsüz (her iki nesne arasında eşit bir ilişki) olabilir. Örneğin, bir "Yazar" ve "Kitap" arasında, bir yazar birden fazla kitap yazabilir; ancak her kitap bir yazarla ilişkilendirilmiş olabilir.  Association, bir nesnenin diğer bir nesne ile birden fazla kez ilişkisi olabilmektedir. Bu nedenle, bir "Müşteri" nesnesi birden fazla "Sipariş" nesnesi ile ilişkilendirilebilir. Association, "bir" (one-to-one), "birçok" (one-to-many), "birden fazla" (many-to-many) gibi çeşitli ilişki türlerini kapsar.
+
+\subsubsection{Python - Association}
+
+\begin{lstlisting}[language=Python]
+class Student:
+    def __init__(self, name):
+        self.name = name
+        self.courses = []
+    def enroll(self, course):
+        self.courses.append(course)
+
+class Course:
+    def __init__(self, title):
+        self.title = title
+        self.students = []
+    def register_student(self, student):
+        self.students.append(student)
+
+math = Course("Math")
+john = Student("John")
+mark = Student("Mark")
+john.enroll(math)
+mark.enroll(math)
+math.register_student(john)
+math.register_student(mark)
+print(f"{john.name} enrolled in {john.courses[0].title}")
+# John enrolled in Math
+print(f"{math.title} has {len(math.students)} student(s)")
+# Math has 2 student(s)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Composition (Bileşim)}
+
+Bileşim, nesne yönelimli programlamada (OOP) bir sınıfın, diğer sınıfların nesnelerini içermesi yoluyla karmaşık nesneler oluşturma tekniğidir. Yani, bir nesne başka nesneleri içerebilir. Bileşim, bir nesnenin, başka bir nesneyle olan ilişkisini tanımlamak için kullanılır ve genellikle "bir" ilişkisi (has-a relationship) olarak adlandırılır. Bileşim, bir nesnenin başka bir nesneye sahip olduğu durumu ifade eder. Bileşim ile oluşturulan nesnelerin yaşam döngüsü, bileşen nesnelerin yaşam döngüsüne bağlıdır. Ana nesne yok olduğunda, bileşen nesneler de yok olur. Bileşim, esneklik sağlar çünkü bir nesne, farklı nesnelerle bir araya getirilerek değiştirilebilir. Bileşim, nesnelerin yeniden kullanılabilirliğini artırır. Bileşen nesneleri, başka sınıflar içinde de kullanılabilir.
+
+\subsubsection{Python - Association}
+
+\begin{lstlisting}[language=Python]
+class Engine:
+    def __init__(self, hp):
+        self.hp = hp
+
+    def start(self):
+        print("Engine is running.")
+
+class Car:
+    def __init__(self, engine):
+        self.engine = engine
+
+    def start(self):
+        print("Car is running.")
+        self.engine.start()
+
+engine = Engine(150)
+car = Car(engine)
+car.start()
+\end{lstlisting}
+
+\newpage
+
+\subsection{Aggregation}
+
+Aggregation, bir nesnenin (veya sınıfın) diğer nesneleri (veya sınıfları) bir koleksiyon olarak içermesi durumudur. Bu ilişkide, iç nesneler (bileşenler) bağımsızdır ve ana nesne yok olsa bile varlıklarını sürdürebilirler. Yani, aggregation ilişkisinde bir nesne diğerine sahip değildir, sadece onunla ilişkilidir. Aggregation'da, ana nesne ile iç nesneler arasında zayıf bir bağlantı vardır. İç nesneler bağımsız olarak varlıklarını sürdürebilir. Aggregation, bir nesnenin diğer bir nesne ile "içinde" değil, "birlikte" olduğu anlamına gelir. Bu da, ilişkili nesnelerin yaşam döngülerinin birbirinden bağımsız olduğu anlamına gelir. Aggregation ilişkisi, bir nesnenin birden fazla iç nesne ile ilişkili olabileceği durumları destekler. Aggregation ilişkisi, iç nesnelerin dışarıdan yönetilmesine olanak tanır. Örneğin, iç nesneler başka nesneler tarafından oluşturulabilir veya silinebilir.
+
+\subsubsection{Python - Association}
+
+\begin{lstlisting}[language=Python]
+class Student:
+    def __init__(self, name):
+        self.name = name
+
+class School:
+    def __init__(self, name):
+        self.name = name
+        self.students = []
+
+    def add_student(self, student):
+        self.students.append(student)
+
+school = School("Greenwood High")
+student1 = Student("John")
+student2 = Student("Bob")
+student3 = Student("Amy")
+
+school.add_student(student1)
+school.add_student(student2)
+school.add_student(student3)
+
+print(f"{school.name} has the following students:")
+for student in school.students:
+    print(student.name)
+\end{lstlisting}
+
+\newpage

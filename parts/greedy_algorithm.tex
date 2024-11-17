@@ -1,0 +1,115 @@
+\section{Greedy Algorithm}
+
+Greedy Algorithm (Açgözlü Algoritma), kararları o anki duruma göre en iyi görünen seçimi yaparak problemi çözmeye çalışan bir algoritma türüdür. Her adımda, o an için en iyi görünen seçeneği (local optimum) seçer ve bu süreci adım adım devam ettirir. Algoritmanın amacı, sonunda global optimuma ulaşmak olsa da, her zaman doğru çözümü garantileyemez. Her adımda o an için en iyi görünen seçimi yapar. Sonuç olarak, her adımda yerel optimum bulunur. Karar verme aşaması bir defaya mahsustur, yani bir kez verilen karar geri alınmaz (irrevocable). Örneğin;
+
+\begin{itemize}
+    \item \textbf{Coin Change Problem}: Belirli bir tutarı en az sayıda bozuk parayla ödeme.
+    \item \textbf{Prim's Algorithm}: Minimum ağırlıklı yayılma ağacı (Minimum Spanning Tree) bulma.
+    \item \textbf{Kruskal Algorithm}: Minimum ağırlıklı yayılma ağacı bulmak için kullanılan bir başka algoritma.
+    \item \textbf{Huffman Coding}: Veri sıkıştırmada kullanılan en optimal bit dizisini üretme algoritması.
+    \item \textbf{Dijkstra Algorithm}: Bir grafikte başlangıç düğümünden diğer düğümlere en kısa yolu bulma.
+    \item \textbf{Activity Selection Problem}: Zaman çizelgesine en fazla etkinlik eklemek.
+    \item \textbf{Fractional Knapsack Problem}: En fazla değer kazanmak için sırt çantasına kısmi nesneler koymak.
+\end{itemize}
+
+\newpage
+
+\subsection{Activity Selection Problem}
+
+Activity Selection Problem (Etkinlik Seçimi Problemi), verilen bir zaman diliminde, çakışmayan en fazla sayıda etkinliği seçmeyi amaçlayan bir optimizasyon problemidir. Her etkinlik belirli bir başlangıç ve bitiş zamanı ile tanımlanır ve amaç, bu etkinliklerin çakışmadan, yani bir etkinlik bir diğerinin başlangıç zamanını geçmeden seçilmesidir.
+
+Bu problem, greedy algoritma yaklaşımı ile çözülür. Bu yaklaşımda en kısa bitiş zamanına sahip etkinliği ilk olarak seçmek, ardından seçilen etkinliğin bitiş zamanından sonra başlayan etkinlikleri seçmek gerekir. Bu, her adımda yerel optimumu (en erken biten etkinlik) seçmeyi amaçlar.
+
+\begin{enumerate}
+    \item Etkinlikler bitiş zamanlarına göre sıralanır.
+    \item İlk etkinlik seçilir (çünkü o en erken biten etkinliktir).
+    \item Sonraki etkinliklerden, ilk etkinlikten sonra başlayabilen ve çakışmayan bir etkinlik seçilir.
+    \item Bu adım, tüm etkinlikler incelenene kadar tekrarlanır.
+\end{enumerate}
+
+\begin{lstlisting}[language=Python]
+def activity_selection(activities):
+    n = len(activities)
+    activities.sort(key=lambda x: x[1])
+    selected_activities = [activities[0]]
+    last_end_time = activities[0][1]
+
+    for i in range(1, n):
+        if activities[i][0] >= last_end_time:
+            selected_activities.append(activities[i])
+            last_end_time = activities[i][1]
+
+    for activity in selected_activities:
+        print(f"Start: {activity[0]}, End: {activity[1]}")
+\end{lstlisting}
+
+\newpage
+
+\subsection{Coin Change Problem}
+
+Coin Change Problem (Bozuk Para Problemi), belirli bir para miktarını (tutarı) ödemek için en az sayıda bozuk parayı kullanmayı amaçlayan bir optimizasyon problemidir. Bu problemde, elimizde belirli bozuk para türleri (değerleri) vardır ve hedef, bu bozuk paraları kullanarak belirli bir tutarı oluşturmak için gereken en küçük bozuk para sayısını bulmaktır.
+
+Coin Change Problem genellikle dinamik programlama (Dynamic Programming - DP) yöntemi ile çözülür. Bu yöntem, alt problemlerin çözümünü kullanarak daha büyük problemleri çözer. Bu problemde amaç, her alt toplam için minimum bozuk para sayısını bulmaktır.
+
+\begin{enumerate}
+    \item 0 tutarını oluşturmak için 0 bozuk para gerekir.
+    \item DP tablosu, her bir tutar için en az kaç bozuk para kullanılması gerektiğini gösterir.
+    \item DP tablosu, her bozuk parayı kullanarak mevcut tutarları en küçük bozuk para sayısı ile doldurur.
+    \item Verilen tutar için en az bozuk para sayısı, DP tablosunun son elemanında bulunur.
+\end{enumerate}
+
+\begin{lstlisting}[language=Python]
+def coin_change(coins, amount):
+    dp = [float('inf')] * (amount + 1)
+    dp[0] = 0
+    for coin in coins:
+        for i in range(coin, amount + 1):
+            dp[i] = min(dp[i], dp[i - coin] + 1)
+    
+    if dp[amount] == float('inf'):
+        return -1
+        
+    return dp[amount]
+\end{lstlisting}
+
+\newpage
+
+\subsection{Fractional Knapsack Problem}
+
+Fractional Knapsack Problem (Kesirli Sırt Çantası Problemi), sırt çantasına eşyalar yerleştirirken, her bir eşyanın bir kısmını alabilmeye izin verildiği bir optimizasyon problemidir. Bu problemde, her eşya bir ağırlık ve değerle tanımlanır ve sırt çantasının kapasitesi belirli bir değere sahiptir. Amaç, sırt çantasını en yüksek değeri elde edecek şekilde doldurmaktır, ancak eşyaların tamamını almak yerine, eşyaların bir kısmını da alabilirsiniz.
+
+Fractional Knapsack, Greedy (Açgözlü) algoritması kullanılarak çözülür. Bu algoritma, her eşyanın değerinin ağırlığına oranını (yani, "değer/ağırlık" oranını) hesaplar ve bu orana göre eşyaları azalan sırayla sıralar. Ardından, eşyaları bu sıralama ile sırt çantasına ekler, ancak çantanın kapasitesi dolana kadar.
+
+\begin{enumerate}
+    \item Her eşya için değer/ağırlık oranı hesaplanır.
+    \item En yüksek değere sahip olan eşya ilk olarak seçilir.
+    \item Çantanın kapasitesini aşmamak için eşyaların tamamı veya bir kısmı çantaya eklenir.
+    \item Sırt çantasına konan eşyaların toplam değeri hesaplanır.
+\end{enumerate}
+
+\begin{lstlisting}[language=Python]
+class Item:
+    def __init__(self, value, weight):
+        self.value = value
+        self.weight = weight
+        self.ratio = value / weight
+
+def fractional_knapsack(capacity, items):
+    items.sort(key=lambda x: x.ratio, reverse=True)
+    total_value = 0.0
+
+    for item in items:
+        if capacity == 0:
+            break
+
+        if item.weight <= capacity:
+            total_value += item.value
+            capacity -= item.weight
+        else:
+            total_value += item.value * (capacity / item.weight)
+            capacity = 0
+
+    return total_value
+\end{lstlisting}
+
+\newpage

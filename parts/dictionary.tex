@@ -1,0 +1,57 @@
+\section{Dictionary (Sözlük)}
+
+Dictionary (sözlük), veri yapıları arasında yer alan ve anahtar-değer (key-value) çiftlerini depolamak için kullanılan bir veri tipidir.  Anahtarlar, benzersiz olmalıdır; her anahtar, yalnızca bir kez kullanılabilir. Değerler ise tekrarlanabilir. Dictionary, anahtarlar üzerinden değerlerine $O(1)$ zaman karmaşıklığı ile erişim sağlar. Bu, arka planda kullanılan hash tabloları sayesinde mümkündür. Dictionary'ler değiştirilebilir; yani öğeleri ekleyebilir, silebilir veya güncellenebilir. Dictionary'ler başka dictionary'ler veya diğer veri yapılarını içerebilir.
+
+Dictionary'ler, genellikle bir hash tablosu kullanarak çalışır. Bu, her anahtarın bir hash değeri ile eşleştirilmesi anlamına gelir. Bu hash değeri, anahtarın bellekteki bir indeksini belirler ve bu sayede hızlı erişim sağlanır.
+
+\begin{itemize}
+    \item \textbf{Anahtar Hashleme}: Anahtarlar bir hash fonksiyonu aracılığıyla bir hash değeri oluşturur. Bu değer, belirli bir bellek konumunu gösterir.
+    \item \textbf{Çarpışma Yönetimi}: İki farklı anahtar aynı hash değerine sahipse (çarpışma), bu durumda çarpışma yönetim teknikleri kullanılarak her iki anahtar da saklanabilir.
+    \item \textbf{Dinamik Boyutlandırma}: Bellek kullanımı arttıkça, dictionary'ler dinamik olarak boyutlanabilir. Yani, öğe sayısı belli bir eşiği geçtiğinde, dictionary'nin boyutu artırılır ve mevcut öğeler yeni bir bellek alanına kopyalanır.
+\end{itemize}
+
+\subsection{Erişim (Access)}
+
+Belirli bir anahtarın değerine erişmek için anahtar kullanılır. Erişim işlemi, doğrudan bir anahtar üzerinden gerçekleştirilir. Dictionary, hash tabloları kullanarak anahtarlara doğrudan erişim sağlar, bu da zaman karmaşıklığını sabit $O(1)$ hale getirir.
+
+\subsubsection{Python - Indexing}
+
+\begin{lstlisting}[language=Python]
+my_dict['key']
+\end{lstlisting}
+
+\subsection{Arama (Search)}
+
+Belirli bir anahtarın dictionary içinde var olup olmadığını kontrol etmek için anahtar kullanılır. Anahtarın hash değeri kullanılarak direkt olarak kontrol edilmesi sayesinde arama işlemi sabit zaman $O(1)$ alır.
+
+\subsubsection{Python - Search}
+
+\begin{lstlisting}[language=Python]
+if item in my_dict:
+    return True
+else:
+    return False
+\end{lstlisting}
+
+\subsection{Ekleme (Insertion)}
+
+Yeni bir anahtar-değer çifti eklemek için anahtar ve değer belirlenir. Eğer anahtar daha önce eklenmemişse yeni bir giriş oluşturulur, mevcutsa değeri güncellenir. Yeni bir anahtar eklemek veya mevcut bir anahtarın değerini güncellemek için yine hash tablosu kullanıldığından, bu işlem genellikle sabit zamanda $O(1)$ gerçekleştirilir.
+
+\subsubsection{Python - Add}
+
+\begin{lstlisting}[language=Python]
+my_dict['key2'] = 2
+\end{lstlisting}
+
+\subsection{Silme (Deletion)}
+
+Anahtar silme işlemi, yine hash tablosu aracılığıyla gerçekleştiği için genellikle sabit zamanda $O(1)$ yapılır.
+
+\subsubsection{Python - Deletion}
+
+\begin{lstlisting}[language=Python]
+del my_dict['key']
+my_dict.pop('key')
+\end{lstlisting}
+
+\newpage

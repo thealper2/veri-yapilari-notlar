@@ -1,0 +1,411 @@
+\section{Stack (Yığın)}
+
+Stack, LIFO (Last In First Out) mantığı ile çalışır. Bu yapı, bir son giren öğenin önce işleme alındığı durumlar için idealdir. Yani, yığına en son eklenen eleman en önce çıkar. Yığında iki temel işlem yapılır:
+
+\begin{itemize}
+    \item \textbf{Push (Ekleme)}: Yığına bir eleman ekleme işlemidir. Eleman, yığının en üstüne eklenir.
+    \item \textbf{Pop (Çıkarma)}: Yığından en üstteki elemanı çıkarma işlemidir. En üstteki eleman çıkarılır ve yığın bir eleman azalır.
+\end{itemize}
+
+Peek, yığının en üstünde bulunan elemanı çıkarmaz ama görüntüler. Stack veri yapısının kapasitesi sınırlı olabilir ya da belleğin izin verdiği kadar büyüyebilir. Bir diziyi kullanarak uygulanırsa kapasite sınırlıdır, ancak dinamik bir veri yapısı ile uygulanırsa kapasite genişleyebilir.
+
+Stack veri yapısı array (dizi) ya da linked list (bağlı liste) yapılarıyla implemente edilir. İki farklı implementasyon şekli vardır:
+
+\begin{itemize}
+    \item \textbf{Array (Dizi)}: Yığın, bir dizinin sonuna ekleme ve çıkarmalar yapılarak kullanılır. Dizi ile uygulandığında, sabit bir boyuta sahiptir. Eğer dizi dolarsa, eleman eklenemez. Bu durumda stack overflow hatası oluşur. Bellekte sürekli ve ardışık bir alan tahsis edilir.
+    \item \textbf{Linked List (Bağlı Liste)}: Her bir eleman, bir sonraki elemanı işaret eden bir pointer (işaretçi) içerir. Dinamik olarak büyüyebilir, dolayısıyla bellekte daha esnek bir kullanım sağlar. Her yeni eleman için dinamik bellek alanı tahsis edilir. Yığın dolmayacağı için stack overflow hatası oluşmaz.
+\end{itemize}
+
+Programlama dillerinde, bir fonksiyon çağrıldığında fonksiyon durumu bir yığında tutulur (call stack). Fonksiyon tamamlandığında bu bilgiler yığından çıkarılır. Derleyiciler, açma ve kapama parantezlerinin doğru sırada olup olmadığını kontrol etmek için yığın kullanır. Grafik ve ağaç yapılarında arama işlemlerinde (depth first search) kullanılır. Geri alma (undo) işlemlerinde, yığındaki son yapılan işlem geri alınarak önceki duruma dönülür.
+
+\subsection{İşlemler}
+
+\subsubsection{Access (Erişim)}
+
+Erişim, yığının en üstteki (son eklenen) elemanının erişilmesidir. Zaman karmaşıklığı $O(1)$'dir. Yalnızca en üstteki elemanın referansı döndürüldüğü için işlem süresi sabittir.
+
+\subsubsection{Search (Arama)}
+
+Yığındaki belirli bir elemanın varlığını kontrol etme işlemidir. Yığın, sıradışı erişim yapısına sahip olduğu için arama işlemi en üstten başlayarak yapılır. Yığın üzerinde döngü ile her bir eleman kontrol edilerek arama yapılır. Zaman karmaşıklığı $O(n)$'dir. En kötü durumda tüm elemanlar kontrol edilmek zorunda kalınabilir.
+
+\subsubsection{Insertion (Ekleme)}
+
+Yığına yeni bir elemanın eklenmesidir. Yeni eleman, yığının en üstüne eklenir. Eğer yığın bir dizi ile temsil ediliyorsa, en son indekse ekleme yapılır. Zaman karmaşıklığı $O(1)$'dir. Yığının sonuna ekleme işlemi yapıldığı için süre sabittir. 
+
+\subsubsection{Deletion (Silme)}
+
+Yığından en üstteki elemanın çıkarılmasıdır. Yığının en üstündeki eleman çıkarılır ve geri döndürülür. Eğer yığın bir dizi ile temsil ediliyorsa, en son indeksten silme işlemi yapılır. Zaman karmaşıklığı $O(1)$'dir. Yığının en üst elemanını çıkarma işlemi sabit sürede gerçekleşir.
+
+\newpage
+
+\subsection{Static Stack (Statik Stack)}
+
+Static stack, önceden belirlenmiş bir kapasiteye sahip olan yığın türüdür. dizi (array) tabanlı olarak uygulanır ve kapasitesi sabittir. Kapasitesi dolduğunda yeni eleman eklenemez ve bir stack overflow hatası meydana gelir. Statik yapı olduğundan, bellekte ayrılan alan sabittir ve ek performans kayıpları yaşanmaz. Boyutu sabit olduğundan kapasitesi dolduğunda yığın büyütülemez. Yığının bellekten fazla yer kaplaması, bellekte gereksiz alan kullanımı oluşturabilir.
+
+\subsubsection{Python - Static Stack}
+
+\begin{lstlisting}[language=Python]
+class Stack:
+    def __init__(self):
+        self.stack = []
+
+    def push(self, item):
+        self.stack.append(item)
+
+    def pop(self):
+        if not self.is_empty():
+            self.stack.pop()
+
+    def peek(self):
+        if not self.is_empty():
+            return self.stack[-1]
+        else:
+            return
+
+    def is_empty(self):
+        return len(self.stack) == 0
+
+    def display(self):
+        values = self.stack.reverse()
+        values = [str(x) for x in self.stack]
+        print('\n'.join(values))
+\end{lstlisting}
+
+\newpage
+
+\subsection{Dynamic Stack (Dinamik Stack)}
+
+Dinamik stack, büyüklüğünün çalışma zamanında dinamik olarak değişebileceği bir yığın türüdür. Bu stack türünde, yığın dolduğu zaman yeni bellek alanı tahsis edilerek kapasite artırılabilir. Yığının kapasitesi sınırsızdır (bellek izin verdiği sürece). Gerektiğinde büyütülebilir. Her yeni eleman ekleme işleminde bellek yönetimi maliyeti artabilir. Dinamik bellek tahsisi nedeniyle sabit stack’e göre daha yavaştır.
+
+\subsubsection{Python - Dynamic Stack}
+
+\begin{lstlisting}[language=Python]
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+class DynamicStack:
+    def __init__(self):
+        self.top = None
+
+    def push(self, data):
+        new_node = Node(data)
+        new_node.next = self.top
+        self.top = new_node
+
+    def pop(self):
+        if self.is_empty():
+            return
+        self.top = self.top.next
+
+    def peek(self):
+        if self.is_empty():
+            return
+        return self.top.data
+
+    def is_empty(self):
+        return self.top is None
+
+    def display(self):
+        if self.is_empty():
+            return
+        values = []
+        current_node = self.top
+        while current_node:
+            values.append(str(current_node.data))
+            current_node = current_node.next
+        print('\n'.join(values))
+\end{lstlisting}
+
+\newpage
+
+\subsection{Double Stack (Tampon Stack)}
+
+Tampon stack, tek bir dizinin iki farklı stack’i içerecek şekilde kullanılmasını sağlar. Bu durumda bir dizi hem baştan hem de sondan kullanılabilir. Bir stack dizinin başından eleman eklerken, diğeri dizinin sonundan eleman ekleyip çıkarır. İki stack’in birleştiği noktada kapasite dolmuş olur. Belleğin daha verimli kullanımı sağlanır. İki yığın aynı bellek alanını paylaşır. Yığınlar arasında boşluk yönetimi zor olabilir. Her iki yığın aynı anda hızla dolarsa bellek taşması meydana gelebilir.
+
+\subsubsection{Python - Double Stack}
+
+\begin{lstlisting}[language=Python]
+class DoubleStack:
+    def __init__(self, capacity=10):
+        self.capacity = capacity
+        self.stack = [None] * capacity
+        self.top1 = -1
+        self.top2 = capacity
+
+    def push1(self, data):
+        if self.top1 < self.top2 - 1:
+            self.top1 += 1
+            self.stack[self.top1] = data
+
+    def push2(self, data):
+        if self.top1 < self.top2 - 1:
+            self.top2 -= 1
+            self.stack[self.top2] = data
+
+    def pop1(self):
+        if self.top1 >= 0:
+            self.stack[self.top1] = None
+            self.top1 -= 1
+
+    def pop2(self):
+        if self.top2 < self.capacity:
+            self.stack[self.top2] = None
+            self.top2 += 1
+
+    def display(self):
+        if self.top1 >= 0:
+            print("Stack 1:", self.stack[:self.top1 + 1])
+
+        if self.top2 < self.capacity:
+            print("Stack 2:", self.stack[self.top2:])
+
+        print("Stack:", self.stack)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Deque - Double Ended Stack (Çift Sonlu Stack)}
+
+Çift sonlu stack, bir yığın yapısının hem başından hem de sonundan eleman ekleyip çıkarılmasına olanak sağlar. Hem LIFO hem de FIFO prensiplerini birleştiren bu yapı, yığının daha esnek kullanılmasını sağlar. Eleman ekleme ve çıkarma hem baştan hem de sondan yapılabilir, bu da kullanım esnekliği sağlar. Çift uçlu olduğu için, tek uçlu stack’lere kıyasla implementasyonu daha karmaşık olabilir.
+
+\subsubsection{Python - Double Ended Stack}
+
+\begin{lstlisting}[language=Python]
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+        self.prev = None
+
+class DoubleEndedStack:
+    def __init__(self):
+        self.front = None
+        self.rear = None
+
+    def add_front(self, data):
+        new_node = Node(data)
+        if self.is_empty():
+            self.front = new_node
+            self.rear = new_node
+        else:
+            new_node.next = self.front
+            self.front.prev = new_node
+            self.front = new_node
+
+    def add_rear(self, data):
+        new_node = Node(data)
+        if self.is_empty():
+            self.front = new_node
+            self.rear = new_node
+        else:
+            new_node.prev = self.rear
+            self.rear.next = new_node
+            self.rear = new_node
+
+    def remove_front(self):
+        if self.is_empty():
+            return
+
+        self.front = self.front.next
+
+        if self.front:
+            self.front.prev = None
+        else:
+            self.rear = None
+
+    def remove_rear(self):
+        if self.is_empty():
+            return
+
+        self.rear = self.rear.prev
+
+        if self.rear:
+            self.rear.next = None
+        else:
+            self.front = None
+
+    def peek_front(self):
+        if self.is_empty():
+            return
+
+        return self.front.data
+
+    def peek_rear(self):
+        if self.is_empty():
+            return
+
+        return self.rear.data
+    
+    def is_empty(self):
+        return self.front is None
+
+    def display(self):
+        if self.is_empty():
+            return
+
+        current_node = self.front
+        while current_node:
+            print(current_node.data, end=" <-> ")
+            current_node = current_node.next
+
+        print("(None)")
+\end{lstlisting}
+
+\newpage
+
+\subsection{Circular Stack (Dairesel Stack)}
+
+Dairesel stack, sıradan bir stack’in dairesel olarak eleman ekleme ve çıkarma yaptığı bir versiyonudur. Dizi üzerinde çalışan bir yapıdır ve stack’in sonuna ulaşıldığında en başa dönülerek işlem yapılmaya devam edilir. Belleğin verimli kullanılması sağlanır. Sabit boyutlu bir diziye rağmen sürekli ekleme ve çıkarma yapılabilir. Uygulaması daha karmaşık olabilir. Belirli bir kapasiteden sonra elemanların üzerine yazılması gerekebilir.
+
+\subsubsection{Python - Circular Stack}
+
+\begin{lstlisting}[language=Python]
+class CircularStack:
+    def __init__(self, capacity=10):
+        self.capacity = capacity
+        self.stack = [None] * capacity
+        self.top = -1
+        self.size = 0
+
+    def push(self, data):
+        if self.is_full():
+            return
+
+        self.top = (self.top + 1) % self.capacity
+        self.stack[self.top] = data
+        self.size += 1
+
+    def pop(self):
+        if self.is_empty():
+            return
+
+        self.stack[self.top] = None
+        self.top = (self.top - 1 + self.capacity) % self.capacity
+        self.size -= 1
+
+    def is_full(self):
+        return self.size == self.capacity
+
+    def is_empty(self):
+        return self.size == 0
+
+    def peek(self):
+        if self.is_empty():
+            return
+
+        return self.stack[self.top]
+
+    def display(self):
+        if self.is_empty():
+            return
+
+        index = self.top
+        elements = []
+
+        for _ in range(self.size):
+            elements.append(self.stack[index])
+            index = (index - 1 + self.capacity) % self.capacity
+
+        print(elements)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Parenthesis Stack (Parantez Yığını)}
+
+Bu stack türü, parantez dengesini kontrol eden algoritmalar için kullanılır. Açma ve kapama parantezlerinin sırasını kontrol etmek için her açma parantezi stack’e eklenir ve her kapama parantezi stack’ten çıkarılır. Doğru bir denge varsa stack sonunda boş kalmalıdır. Basit ve hızlıdır, özellikle ifade doğrulama gibi işlemler için idealdir. Sadece belirli bir tür uygulamalar için kullanışlıdır.
+
+\subsubsection{Python - Parenthesis Stack}
+
+\begin{lstlisting}[language=Python]
+class ParenthesisStack:
+    def __init__(self):
+        self.stack = []
+
+    def push(self, data):
+        self.stack.append(data)
+
+    def pop(self):
+        if self.is_empty():
+            return
+
+        self.stack.pop()
+
+    def is_empty(self):
+        return len(self.stack) == 0
+
+    def peek(self):
+        if self.is_empty():
+            return
+
+        return self.stack[-1]
+
+    def check(self, expression):
+        opening_brackets = "({["
+        closing_brackets = ")}]"
+        matches = {")": "(", "}": "{", "]": "["}
+        for char in expression:
+            if char in opening_brackets:
+                self.push(char)
+            elif char in closing_brackets:
+                if self.is_empty() or self.peek() != matches[char]:
+                    return False
+                self.pop()
+        return self.is_empty()
+\end{lstlisting}
+
+\newpage
+
+\subsection{Ordered Stack (Sıralı Stack)}
+
+Sıralı stack, eklenen elemanların sıralı bir şekilde yerleştirildiği bir yığındır. Bu stack’te, elemanlar eklendikçe otomatik olarak sıralanır ve çıkarılmak istendiğinde sıralı bir şekilde işlem yapılır. Elemanlar her zaman sıralı bir şekilde tutulur. Sıralama işlemi gerektiren durumlarda oldukça kullanışlıdır. Her yeni eleman eklendiğinde sıralama işlemi yapılması gerektiğinden ek maliyetler ve karmaşıklık oluşur.
+
+\subsubsection{Python - Ordered Stack}
+
+\begin{lstlisting}[language=Python]
+class OrderedStack:
+    def __init__(self):
+        self.stack = []
+
+    def push(self, data):
+        if self.is_empty() or data >= self.stack[-1]:
+            self.stack.append(data)
+
+        else:
+            temp_stack = []
+            while not self.is_empty() and self.stack[-1] > data:
+                temp_stack.append(self.pop())
+
+            self.stack.append(data)
+            while temp_stack:
+                self.stack.append(temp_stack.pop())
+
+    def pop(self):
+        if self.is_empty():
+            return
+
+        return self.stack.pop()
+
+    def is_empty(self):
+        return len(self.stack) == 0
+
+    def peek(self):
+        if self.is_empty():
+            return
+
+        return self.stack[-1]
+
+    def display(self):
+        values = [str(x) for x in self.stack]
+        print('\n'.join(values))
+\end{lstlisting}
+
+\newpage
+
+\subsection{Pseudo Stack (Sahte Stack)}
+
+Bu stack türü, queue (kuyruk) yapısı kullanılarak stack işlevselliği sağlanır. Queue yapısı, stack’e benzer şekilde eleman ekleme ve çıkarma işlemlerini gerçekleştirebilir, ancak çalışma mantığı biraz daha farklıdır. Bu tip sahte yapılar farklı veri yapılarını entegre etmek için kullanılır. Kuyruk ve stack yapılarını birleştirerek esneklik sağlar. Stack'in doğrudan kullanımı yerine daha karmaşık bir yapı kullanıldığı için performans kaybı olabilir.
+
+\newpage

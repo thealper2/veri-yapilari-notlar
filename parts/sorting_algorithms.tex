@@ -1,0 +1,523 @@
+\section{Sorting algorithms (Sıralama Algoritmaları)}
+
+Sorting (Sıralama), bir veri kümesini belirli bir sıraya koyma işlemidir. Sıralama işlemleri, sayısal veri için artan (ascending) veya azalan (descending) düzende yapılır. Sıralama işlemleri birçok algoritmanın temelini oluşturur.
+
+\begin{table}[h]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|}
+\hline
+Sorting Algorithm & Space Used (Bellek) & Stability (Kararlilik) \\ \hline
+Bubble Sort & In-place & Stable \\ \hline
+Selection Sort & In-place & Unstable \\ \hline
+Insertion Sort & In-place & Stable \\ \hline
+Merge Sort & Out-of-place & Stable \\ \hline
+Quick Sort & In-place & Unstable \\ \hline
+Heap Sort & In-place & Unstable \\ \hline
+Counting Sort & Out-of-place & Stable \\ \hline
+Radix Sort & Out-of-place & Stable \\ \hline
+Shell Sort & In-place & Unstable \\ \hline
+\end{tabular}%
+}
+\end{table}
+
+\subsection{Types of Sorting (Sıralama Türleri)}
+
+Sıralama algoritmaları, kullanılan bellek (space used) ve kararlılık (stability) açısından sınıflandırılır. Bu özellikler, algoritmanın ne kadar bellek kullandığını ve sıralama işlemi sırasında aynı değere sahip öğelerin orijinal sıralarını koruyup koruyamadığını açıklar.
+
+\subsubsection{Space Used (Kullanılan Bellek)}
+
+Bir sıralama algoritması, işlem sırasında ek bellek kullanıp kullanmamasına göre iki kategoriye ayrılır:
+
+\begin{itemize}
+    \item \textbf{In-place Sorting (Yerinde Sıralama)}: Algoritma, ek bir bellek kullanmadan veya sadece çok az miktarda ek bellek kullanarak veriyi sıralar. Veriler üzerinde doğrudan çalışır ve sıralama işlemini orijinal dizi üzerinde gerçekleştirir. Daha az bellek kullanırlar ve büyük veri kümeleri üzerinde çalışırken belleği etkin kullanmak isteyen durumlar için tercih edilir. Örneğin: Bubble Sort, Selection Sort, Insertion Sort, Quick Sort. Bu algoritmalar veriyi orijinal dizi üzerinde sıraladıkları için ek depolama gerektirmezler.
+    \item \textbf{Out-of-place Sorting (Yerinde Olmayan Sıralama)}: Algoritma, sıralama işlemi için orijinal veri yapısının dışında ek bellek kullanır. Verileri sıralamak için yeni bir dizi veya başka veri yapıları oluşturur. Daha fazla bellek gerektirirler çünkü sıralama işlemi sırasında ekstra alan kullanılır. Bu algoritmalar genellikle daha esnektir ama bellek kullanımı açısından verimsiz olabilirler. Örneğin: Merge Sort, Counting Sort, Radix Sort.
+\end{itemize}
+
+\subsubsection{Stability (Kararlılık)}
+
+Stability kavramı, sıralama işlemi sırasında aynı değere sahip öğelerin orijinal sıralamalarını koruyup korumadığını ifade eder. Algoritmalar bu açıdan stable (kararlı) ve unstable (kararsız) olarak sınıflandırılır.
+
+\begin{itemize}
+    \item \textbf{Stable Sorting (Kararlı Sıralama)}: Aynı değere sahip iki elemanın sıralama işleminden önceki sırası, sıralama işleminden sonra da korunur. Yani, veri kümesinde aynı anahtara sahip iki eleman varsa, sıralama işleminden sonra ilk olarak gelen yine ilk olarak gelir. Bu özellikle önemlidir çünkü veriyi sıralarken sadece bir kriter kullanılmıyorsa  kararlı sıralama sonuçları doğru düzenlemeyi korur. Örneğin: Merge Sort, Bubble Sort, Insertion Sort, Counting Sort.
+    \item \textbf{Unstable Sorting (Kararsız Sıralama)}: Aynı değere sahip iki elemanın sıralama işleminden önceki sırası, sıralama işleminden sonra korunmayabilir. Yani, sıralama işlemi sonucunda aynı anahtara sahip elemanların sırası rastgele değişebilir. Kararsız sıralama algoritmaları bazı durumlarda daha hızlı olabilir ancak orijinal sıralamayı bozar. Bu yüzden eğer sıralanacak elemanlar arasında başka bir özellik önem arz ediyorsa kararsız algoritmalar problem yaratabilir. Örneğin: Quick Sort, Selection Sort, Heap Sort.
+\end{itemize}
+
+\newpage
+
+\subsection{Bubble Sort}
+
+Bubble Sort, öğeleri bir dizinin başından sonuna doğru hareket ederek sıralar. Algoritma, komşu iki elemanı karşılaştırır ve eğer yanlış sıradaysa yerlerini değiştirir. Bu işlem dizinin sonunda kadar tekrarlanır. Ek bir bellek kullanmaz. Aynı değerlere sahip öğelerin sırası korunur.
+
+\begin{enumerate}
+    \item Dizinin ilk iki elemanı karşılaştırılır. Eğer ilk eleman, ikinciden büyükse yerleri değiştirilir.
+    \item Aynı işlen bir sonraki çift için de yapılır.
+    \item Bu işlem dizinin sonuna kadar devam eder. En büyük eleman en sona taşınmış olur.
+    \item Diziyi bir kez daha tararken bu işlem tekrar edilir, ancak her turda sondaki sıralanmış elemanlar göz ardı edilir.
+    \item Eğer bir turda hiç eleman yer değiştirmiyorsa, dizi sıralanmıştır.
+\end{enumerate}
+
+Zaman karmaşıklığı; en iyi durumda, yani dizi zaten sıralıysa $O(n)$; ortalama durumda $O(n^2)$, en kötü durumda ise $O(n^2)$'dir.
+
+\subsubsection{Python Kodu - Bubble Sort}
+
+\begin{lstlisting}[language=Python]
+def bubble_sort(array):
+    n = len(array)
+    step = 0
+    print("Array =", array)
+    for i in range(n):
+        swapped = False
+        for j in range(0, n - i - 1):
+            if array[j] > array[j + 1]:
+                array[j], array[j + 1] = array[j + 1], array[j]
+                swapped = True
+                step += 1
+                print(f"Step {step} = {array}")
+
+        if not swapped:
+            break
+
+    return array
+
+array = [12, 52, 82, 38, 69, 20, 50]
+bubble_sort(array)
+# Array = [12, 52, 82, 38, 69, 20, 50]
+# Step 3 = [12, 52, 38, 82, 69, 20, 50]
+# Step 4 = [12, 52, 38, 69, 82, 20, 50]
+# Step 5 = [12, 52, 38, 69, 20, 82, 50]
+# Step 6 = [12, 52, 38, 69, 20, 50, 82]
+# Step 8 = [12, 38, 52, 69, 20, 50, 82]
+# Step 10 = [12, 38, 52, 20, 69, 50, 82]
+# Step 11 = [12, 38, 52, 20, 50, 69, 82]
+# Step 14 = [12, 38, 20, 52, 50, 69, 82]
+# Step 15 = [12, 38, 20, 50, 52, 69, 82]
+# Step 17 = [12, 20, 38, 50, 52, 69, 82]
+\end{lstlisting}
+
+\newpage
+
+\subsection{Selection Sort}
+
+Selection Sort, bir dizinin her adımında en küçük elemanı bulup, dizinin başına yerleştirerek sıralama işlemine gerçekleştirir. Aynı değere sahip öğeler, sıralama sonucunda orijinal sıralarını kaybedebilir. Ek bellek kullanmaz.
+
+\begin{enumerate}
+    \item İlk elemandan başlayarak diziyi tarar ve en küçük elemanı bulur.
+    \item Bulunan en küçük eleman ile o adımda kontrol edilen elemanı yer değiştirir.
+    \item Dizinin sıralanmamış kısmı her adımda bir eleman küçülür.
+    \item Tüm elemanlar sıralanana kadar bu işlem tekrarlanır.
+\end{enumerate}
+
+Zaman karmaşıklığı; en iyi durumda, yani dizi zaten sıralıysa $O(n^2)$; ortalama durumda $O(n^2)$, en kötü durumda ise $O(n^2)$'dir. Çünkü algoritma her eleman için $n-1$ karşılaştırma yapar ve bu işlemler $n$ eleman için tekrarlanır.
+
+\subsubsection{Python Kodu - Selection Sort}
+
+\begin{lstlisting}[language=Python]
+def selection_sort(array):
+    n = len(array)
+    step = 0
+    print("Array =", array)
+    for i in range(n):
+        min_index = i
+        for j in range(i + 1, n):
+            step += 1   
+            if array[j] < array[min_index]:
+                min_index = j
+
+        if min_index != i:
+            array[i], array[min_index] = array[min_index], array[i]
+            print(f"Step {step} = {array}")
+    
+    return array
+
+array = [12, 52, 82, 38, 69, 20, 50]
+selection_sort(array)
+# Array = [12, 52, 82, 38, 69, 20, 50]
+# Step 11 = [12, 20, 82, 38, 69, 52, 50]
+# Step 15 = [12, 20, 38, 82, 69, 52, 50]
+# Step 18 = [12, 20, 38, 50, 69, 52, 82]
+# Step 20 = [12, 20, 38, 50, 52, 69, 82]
+\end{lstlisting}
+
+\newpage
+
+\subsection{Insertion Sort}
+
+Insertion Sort, kart oyunlarından esinlenerek geliştirilmiştir. Bir diziyi kartları sıralar gibi elemanları tek tek alıp doğru yerlerine yerleştirerek sıralar. Dizi iki bölüme ayrılır: sıralanmış ve sıralanmamış kısım. Algoritma her adımda sıralanmamış kısımdan bir eleman alır ve onu sıralı kısımdaki doğru pozisyona yerleştirir. Ek bir bellek kullanmaz. Aynı değerlere sahip elemanların sırası korunur.
+
+\begin{enumerate}
+    \item İlk eleman sıralanmış kabul edilir.
+    \item Sıralanmamış kısımdaki ilk eleman seçilir ve sıralanmış kısma eklenir.
+    \item Sıralanmamış kısımdaki her eleman için, bu eleman sıralı kısmın içine doğru şekilde yerleştirilir.
+    \item Bu işlem tüm elemanlar sıralanmış olana kadar devam edilir.
+\end{enumerate}
+
+Zaman karmaşıklığı; en iyi durumda, yani dizi zaten sıralıysa $O(n)$; ortalama durumda $O(n^2)$, en kötü durumda, yani dizi ters sıralıysa $O(n^2)$'dir. Çünkü algoritma her eleman için $n-1$ karşılaştırma yapar ve bu işlemler $n$ eleman için tekrarlanır.
+
+\subsubsection{Python Kodu - Insertion Sort}
+
+\begin{lstlisting}[language=Python]
+def insertion_sort(array):
+    n = len(array)
+    step = 0
+    print("Array =", array)
+    for i in range(1, n):
+        key = array[i]
+        j = i - 1
+        while j >= 0 and key < array[j]:
+            step += 1
+            array[j + 1] = array[j]
+            j -= 1
+
+        array[j + 1] = key
+        print(f"Step {step} = {array}")
+    
+    return array
+
+array = [12, 52, 82, 38, 69, 20, 50]
+insertion_sort(array)
+# Array = [12, 52, 82, 38, 69, 20, 50]
+# Step 2 = [12, 38, 52, 82, 69, 20, 50]
+# Step 3 = [12, 38, 52, 69, 82, 20, 50]
+# Step 7 = [12, 20, 38, 52, 69, 82, 50]
+# Step 10 = [12, 20, 38, 50, 52, 69, 82]
+\end{lstlisting}
+
+\newpage
+
+\subsection{Merge Sort}
+
+Merge Sort, böl ve fethet (divide and conquer) yaklaşımını kullanır. Bu algoritma diziyi sürekli iki alt diziye bölenerek, her alt diziyi sıralar ve ardından sıralı alt dizileri birleştirerek sonuca ulaşır. Ek bellek kullanır, geçici diziler oluşturulur. Aynı değere sahip elemanların sırası korunur.
+
+\begin{enumerate}
+    \item Dizi iki eşit parçaya bölünür.
+    \item Her iki yarı ayrı ayrı sıralanır. Bu işlem sürekli devam eder, en küçük alt dizilere kadar bölünür.
+    \item Alt diziler sıralandıktan sonra bu alt diziler birleştirilir ve sıralı dizi elde edilir.
+\end{enumerate}
+
+Zaman karmaşıklığı; en iyi durumda $O(nlogn)$; ortalama durumda $O(nlogn)$, en kötü durumda $O(nlogn)$'dir. Çünkü her bölme işlemi diziyi yarıya böler ve $logn$ adımda bu işlemi tamamlar. Her bir adımda $n$ elemanı birleştirme işlemi yapılır, bu yüzden toplam karmaşıklık $O(nlogn)$ olur.
+
+\subsubsection{Python Kodu - Merge Sort}
+
+\begin{lstlisting}[language=Python]
+def merge_sort(array):
+    if len(array) > 1:
+        mid = len(array) // 2
+        left_half = array[:mid]
+        right_half = array[mid:]
+
+        merge_sort(left_half)
+        merge_sort(right_half)
+
+        i = 0
+        j = 0
+        k = 0
+
+        while i < len(left_half) and j < len(right_half):
+            if left_half[i] < right_half[j]:
+                array[k] = left_half[i]
+                i += 1
+
+            else:
+                array[k] = right_half[j]
+                j += 1
+
+            k += 1
+
+        while i < len(left_half):
+            array[k] = left_half[i]
+            i += 1
+            k += 1
+
+        while j < len(right_half):
+            array[k] = right_half[j]
+            j += 1
+            k += 1
+
+    return array
+
+array = [12, 52, 82, 38, 69, 20, 50]
+merge_sort(array)
+# [12, 20, 38, 50, 52, 69, 82]
+\end{lstlisting}
+
+\newpage
+
+\subsection{Quick Sort}
+
+Quick Sort, böl ve fethet (divide and conquer) yaklaşımını kullanır. Ancak Merge Sort'dan farklı olarak ek bellek kullanmadan çalışabilir ve daha hızlıdır. Quick Sort algoritmasında temel işlem, dizinin belirli bir pivot elemanı etrafında sıralanmasıdır. Pivot seçildikten sonra dizinin elemanları pivot'tan küçük ve büyük olanlar olarak ikiye ayrılır ve bu işlem her alt dizi için tekrarlanarak dizi tamamen sıralanır. Aynı değere sahip elemanların sırası korunmaz.
+
+\begin{enumerate}
+    \item Dizi içinden bir pivot eleman seçilir. Pivot, dizinin herhangi bir elemanı olabilir.
+    \item Dizi, pivot elemanına göre iki alt diziye ayrılır. Pivot'tan küçük olanlar sol tarafa, büyük olanlar sağ tarafa yerleştirilir.
+    \item Her iki alt dizi için de aynı işlemler tekrarlanır. Bu adımlar dizinin boyutu 1 olana kadar devam eder. Her alt dizi boyutu 1 olduğunda dizi sıralanmış olur.
+\end{enumerate}
+
+Zaman karmaşıklığı; en iyi durumda $O(nlogn)$; ortalama durumda $O(nlogn)$, en kötü durumda, yani dizi sıralıysa veya kötü pivot seçimi yapılırsa $O(n^2)$'dir
+
+\subsubsection{Python Kodu - Quick Sort}
+
+\begin{lstlisting}[language=Python]
+def quick_sort(array):
+    if len(array) <= 1:
+        return array
+
+    else:
+        pivot = array[-1]
+
+        left = [x for x in array[:-1] if x <= pivot]
+        right = [x for x in array[:-1] if x > pivot]
+        return quick_sort(left) + [pivot] + quick_sort(right)
+
+array = [12, 52, 82, 38, 69, 20, 50]
+quick_sort(array)
+# [12, 20, 38, 50, 52, 69, 82]
+\end{lstlisting}
+
+\newpage
+
+\subsection{Heap Sort}
+
+Heap Sort, binary heap yapısını kullanır. Heap, her bir düğümün altındaki düğümlerden daha büyük ya da daha küçük olduğu bir ağaç yapısıdır. Ek bellek kullanmaz. Aynı değere sahip indislerin yeri korunmaz.
+
+\begin{enumerate}
+    \item İlk olarak dizi max-heap yapısına dönüştürülür. Bu, dizideki her alt ağaç için en büyük elemanın kökte olmasını sağlar.
+    \item Bu eleman dizinin sonuna alınır ve kalan dizi yeniden max-heap'e dönüştürülür.
+    \item Bu işlem, dizideki tüm elemanlar işlenene kadar devam eder.
+\end{enumerate}
+
+Zaman karmaşıklığı; en iyi durumda $O(nlogn)$; ortalama durumda $O(nlogn)$, en kötü durumda $O(nlogn)$'dir. Çünkü her bir heap yapısına yerleştirme ve heap'ten çıkarma işlemi $O(logn)$ süresinde yapılır ve bu işlem $n$ kez tekrar edilir.
+
+\subsubsection{Python Kodu - Heap Sort}
+
+\begin{lstlisting}[language=Python]
+def heapify(array, n, i):
+    largest = i
+    left = 2 * i + 1
+    right = 2 * i + 2
+
+    if left < n and array[left] > array[largest]:
+        largest = left
+
+    if right < n and array[right]> array[largest]:
+        largest = right
+
+    if largest != i:
+        array[i], array[largest] = array[largest], array[i]
+        heapify(array, n, largest)
+
+def heap_sort(array):
+    n = len(array)
+
+    for i in range(n // 2 - 1, -1, -1):
+        heapify(array, n, i)
+
+    for i in range(n - 1, 0, -1):
+        array[i], array[0] = array[0], array[i]
+        heapify(array, i, 0)
+
+    return array
+
+array = [12, 52, 82, 38, 69, 20, 50]
+heap_sort(array)
+# [12, 20, 38, 50, 52, 69, 82]
+\end{lstlisting}
+
+\newpage
+
+\subsection{Radix Sort}
+
+Radix Sort, bir dağıtım tabanlı (distribution-based) sıralama algoritmasıdır. Bu algoritma, karşılaştırmaya dayalı olmayan bir sıralama yöntemidir ve sayıları basamaklarına ayırarak her basamağı sırayla sıralar. Diğer karşılaştırmaya dayalı sıralama algoritmalarından farklı olarak, belirli bir anahtara veya basamağa göre sıralama yapar. Radix Sort, bir sayının her bir basamağını sırasıyla sıralayarak çalışır. Bu sıralama en sağdaki (en az anlamlı basamaktan) başlar, sonra sol tarafa doğru sıralama yapılır. Bu işleme LSD (Least Significant Digit) tabanlı Radix Sort denir. Ekstra bellek kullanır. İki temel aşamaya dayanır:
+
+\begin{itemize}
+    \item \textbf{Basamak Tabanlı Sıralama}: Sayılar önce en sağdaki basamaktan başlayarak sıralanır. Sonra bir sonraki basamağa geçilir, ve bu işlem sayının en solundaki basamağa kadar devam eder.
+    \item \textbf{Stable Sıralama}: Her basamak için sıralama işlemi yapılırken kararlı (stable) bir sıralama algoritması kullanılır. Bu Counting Sort ile yapılır, çünkü sayısal veriler için uygun ve verimlidir.
+\end{itemize}
+
+Radix Sort’un zaman karmaşıklığı, sıralanacak sayıların basamak sayısına bağlıdır. Eğer her bir sayı $d$ basamaklıysa ve sıralama işlemi $n$ sayısı için yapılacaksa, Radix Sort’un zaman karmaşıklığı $O(d \times (n + k))$, burada $k$ basamak değerinin alabileceği maksimum sayıdır. Bu, küçük bir sabit olduğundan dolayı $O(n)$ performansına yakındır.
+
+\subsubsection{Python Kodu - Radix Sort}
+
+\begin{lstlisting}[language=Python]
+def counting_sort(array, exp):
+    n = len(array)
+    output = [0] * n
+    count = [0] * 10
+
+    for i in range(n):
+        index = array[i] // exp
+        count[index % 10] += 1
+
+    for i in range(1, 10):
+        count[i] += count[i - 1]
+
+    i = n - 1
+    while i >= 0:
+        index = array[i] // exp
+        output[count[index % 10] - 1] = array[i]
+        count[index % 10] -= 1
+        i -= 1
+
+    for i in range(len(array)):
+        array[i] = output[i]
+
+def radix_sort(array):
+    max_num = max(array)
+    exp = 1
+    while max_num // exp > 0:
+        counting_sort(array, exp)
+        exp *= 10
+
+    return array
+
+array = [12, 52, 82, 38, 69, 20, 50]
+radix_sort(array)
+# [12, 20, 38, 50, 52, 69, 82]
+\end{lstlisting}
+
+\newpage
+
+\subsection{Counting Sort}
+
+Counting Sort, karşılaştırma tabanlı olmayan bir sıralama algoritmasıdır. Counting Sort, verinin doğrudan sıralanmasından ziyade her bir elemanın ne kadar tekrarlandığını sayarak çalışır. Bu sayım bilgisi kullanılarak, sıralı bir sonuç elde edilir. Ek bellek kullanır. Sadece belirli veri türlerinde kullanılabilir.
+
+\begin{enumerate}
+    \item İlk olarak, sıralanacak verinin min ve max değerleri tespit edilir.
+    \item Verinin her elemanının kaç kez tekrarlandığı belirlenir ve bu bilgi, sıralanacak verinin aralığına göre bir dizide toplanır. Bu sayım dizisi, her elemanın sıralı dizide nerede yer alacağını gösterir.
+    \item Son adımda, sayım dizisinde elde edilen bilgiler kullanılarak sıralama yapılır. Bu işlem, sayılar ne kadar küçükse, daha erken konumlarda yer alacak şekilde yapılır.
+\end{enumerate}
+
+Zaman karmaşıklığı $O(n + k)$'dir. Burada $n$, sıralanacak öğe sayısını; $k$, sayılardaki en büyük değeri temsil eder.
+
+\subsubsection{Python Kodu - Counting Sort}
+
+\begin{lstlisting}[language=Python]
+def counting_sort(array):
+    min_val = min(array)
+    max_val = max(array)
+    
+    count_range = max_val - min_val + 1
+    count = [0] * count_range
+    output = [0] * len(array)
+
+    for num in array:
+        count[num - min_val] += 1
+
+    for i in range(1, count_range):
+        count[i] += count[i - 1]
+
+    for num in reversed(array):
+        count[num - min_val] -= 1
+        output[count[num - min_val]] = num
+
+    for i in range(len(array)):
+        array[i] = output[i]
+
+    return array
+
+array = [12, 52, 82, 38, 69, 20, 50]
+counting_sort(array)
+# [12, 20, 38, 50, 52, 69, 82]
+\end{lstlisting}
+
+\newpage
+
+\subsection{Shell Sort}
+
+Donald Shell tarafından 1959 yılında önerilmiştir. Shell Sort, Insertion Sort algoritmasını geliştiren bir yaklaşım sunar. Insertion Sort, her seferinde bir öğeyi doğru yerinde koymaya çalışırken, Shell Sort bunun yerine öğeleri belirli bir "gap" (mesafe) ile yer değiştirerek sıralar. Bu sayede, öğeler hızla doğru yere yaklaşır. Ek bellek kullanmaz.
+
+\begin{enumerate}
+    \item Başlangıçta bir gap değeri seçilir. Bu gap değeri, dizideki öğeleri birbirinden uzak mesafelerle karşılaştırmaya başlar.
+    \item Gap başlangıçta genellikle büyük bir değer olur ve her iterasyonda bu gap değeri küçültülür.
+    \item İnsertion Sort ile sıralama yapılır: Ancak normal insertion sort’tan farklı olarak, sıralama sadece gap mesafesindeki öğelerle yapılır. Yani, her bir gap değeri için arr[i] ile arr[i-gap] öğeleri karşılaştırılır ve sıralama yapılır.
+    \item Gap değerleri sırasıyla küçültülür, genellikle her adımda gap'ler yarıya indirilir veya belirli bir sayı ile bölünür.
+    \item Gap 1 olduğunda, tüm öğeler doğru konumlarına gelir ve sıralama tamamlanır.
+\end{enumerate}
+
+\subsubsection{Python Kodu - Shell Sort}
+
+\begin{lstlisting}[language=Python]
+def shell_sort(array):
+    n = len(array)
+    gap = n // 2
+    step = 0
+    while gap > 0:
+        for i in range(gap, n):
+            temp = array[i]
+            j = i
+            while j >= gap and array[j - gap] > temp:
+                array[j] = array[j - gap]
+                j -= gap
+                
+            array[j] = temp
+        
+        gap //= 2 
+
+    return array
+
+array = [12, 52, 82, 38, 69, 20, 50]
+shell_sort(array)
+# [12, 20, 38, 50, 52, 69, 82]
+\end{lstlisting}
+
+\newpage
+
+\subsection{Bucket Sort}
+
+Bucket Sort, belirli bir aralıktaki sayıları kutulara (bucket) yerleştirip, her kutuyu kendi içinde sıralayarak sonunda sıralanmış diziyi elde eder. Dağılım tabanlı bir algoritmadır. Ek bellek kullanır.
+
+\begin{enumerate}
+    \item Veri küçük aralıklara bölünür. Bu aralıklar, her bucket için belirli bir aralığı temsil eder. Her kutu belirli bir aralıkta bulunan öğeleri tutar.
+    \item Her kutudaki öğeler, daha verimli bir sıralama algoritması kullanılarak sıralanır.
+    \item Son olarak, sıralı kutular birleştirilerek sıralanmış diziyi elde ederiz.
+\end{enumerate}
+
+Zaman karmaşıklığı en iyi durumda $O(n + k)$, yani; $n$ öğe sayısı ve $k$ kutu sayısı için veriler eşit şekilde dağıtıldığında ve her kutu küçükse. En kötü durumda, her kutu büyükse $O(n^2)$'dir.
+
+\subsubsection{Python Kodu - Bucket Sort}
+
+\begin{lstlisting}[language=Python]
+def insertion_sort(array):
+    for i in range(1, len(array)):
+        key = array[i]
+        j = i - 1
+        while j >= 0 and array[j] > key:
+            array[j + 1] = array[j]
+            j -= 1
+            
+        array[j + 1] = key
+
+def bucket_sort(array):
+    if len(array) == 0:
+        return array
+
+    min_value = min(array)
+    max_value = max(array)
+
+    bucket_count = len(array)
+    bucket_range = (max_value - min_value) / bucket_count
+
+    buckets = [[] for _ in range(bucket_count)]
+
+    for num in array:
+        index = int((num - min_value) // bucket_range)
+        if index == bucket_count:
+            index = bucket_count - 1
+        buckets[index].append(num)
+
+    for bucket in buckets:
+        insertion_sort(bucket)
+
+    sorted_array = []
+    for bucket in buckets:
+        sorted_array.extend(bucket)
+
+    return sorted_array
+
+bucket_sort(array)array = [12, 52, 82, 38, 69, 20, 50]
+bucket_sort(array)
+# [12, 20, 38, 50, 52, 69, 82]
+\end{lstlisting}
+
+\newpage
+
+\newpage

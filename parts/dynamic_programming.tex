@@ -1,0 +1,70 @@
+\section{Dynamic Programming}
+
+Dynamic Programming (DP), bir problemi daha küçük alt problemlere ayırarak çözme yöntemidir. Bu yöntem, bir problemi çözmek için aynı alt problemleri tekrar tekrar çözmek yerine, daha önce çözülen alt problemlerin sonuçlarını saklayarak tekrar hesaplama gereksinimini ortadan kaldırır. DP, genellikle optimizasyon problemlerinde kullanılır ve daha verimli çözümler üretir. Problemin, daha küçük alt problemlere bölünebilmesi gerekir. Bu alt problemler bağımsız olabilir ya da birbiriyle ilişkili olabilir. Problemin çözümü, alt problemlerin çözümlerine dayanıyorsa bu özellik sağlanır. Yani, bir problemin optimal çözümü, alt problemlerin optimal çözümlerinin birleşiminden oluşur. DP, aynı alt problemleri birden fazla kez çözmek zorunda kalır. Bu nedenle, çözülen alt problemler kaydedilerek ilerlenir. Bu özellik, DP'nin verimli olmasını sağlar. DP genellikle iki farklı yaklaşım ile uygulanır:
+
+\begin{itemize}
+    \item \textbf{Memoization}: Alt problemlerin çözümleri kaydedilir ve tekrar kullanılır (top-down yaklaşımı).
+    \item \textbf{Tabulation}: Tüm alt problemler bir tabloya yerleştirilir ve tablodan en küçükten büyüğe doğru çözüm yapılır (bottom-up yaklaşımı).
+\end{itemize}
+
+\newpage
+
+\subsection{Longest Increasing Subsequence (LIS)}
+
+Longest Increasing Subsequence (LIS), bir dizideki ardışık olmayan ancak sıralı en uzun artan alt diziyi bulma problemidir. Yani, verilen bir diziden, sırasını bozmadan, elemanları artan şekilde sıralayarak en uzun alt diziyi elde etmeyi amaçlar. Elemanlar ardışık olmak zorunda değildir, ancak sırasıyla artan olmalıdır.
+
+\begin{lstlisting}[language=Python]
+def longest_increasing_subsequence(arr):
+    n = len(arr)
+    dp = [1] * n 
+    
+    for i in range(1, n):
+        for j in range(i):
+            if arr[i] > arr[j]:
+                dp[i] = max(dp[i], dp[j] + 1)
+    
+    return max(dp)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Rod Cutting Problem}
+
+Rod Cutting Problem (Çubuk Kesme Problemi), verilen bir çubuğun belirli bir uzunlukta kesilmesiyle en yüksek geliri elde etme problemidir. Çubuğun çeşitli uzunluklara kesilmesi mümkündür ve her uzunluk için bir fiyat belirlenmiştir. Amaç, çubuğu keserek, kesilen parçaların fiyatlarının toplamını maksimize etmektir. Bir çubuğun uzunluğu ve bu uzunluklara karşılık gelen fiyatlar verilmiştir. Çubuk, farklı uzunluklarda kesilebilir ve her bir parçanın bir fiyatı vardır. Çubuğun tamamını tek bir parça halinde satmak yerine, onu daha küçük parçalara kesmek ve bu parçalardan daha fazla gelir elde etmek mümkündür. Kesimlerin sırası önemli değildir. Önemli olan, verilen fiyatlar ile maksimum toplam geliri elde etmektir.
+
+\begin{lstlisting}[language=Python]
+def rod_cutting(prices, n):
+    dp = [0] * (n + 1)
+    for i in range(1, n + 1):
+        max_val = -float('inf')
+        for j in range(1, i + 1):
+            max_val = max(max_val, prices[j - 1] + dp[i - j])
+        dp[i] = max_val
+    
+    return dp[n]
+\end{lstlisting}
+
+\newpage
+
+\subsection{Subset Sum Problem}
+
+Subset Sum Problem (Alt Küme Toplamı Problemi), verilen bir sayı kümesinden bazı elemanları seçerek, seçilen elemanların toplamının belirli bir hedef değeri (sum) verip vermediğini bulma problemidir. Yani, bir dizi sayıyı seçip, bu sayılardan toplamı verilen bir hedef değere eşit olan bir alt küme oluşturulup oluşturulamayacağını belirlemeye çalışırız.
+
+\begin{lstlisting}[language=Python]
+def subset_sum(arr, target_sum):
+    n = len(arr)
+    dp = [[False] * (target_sum + 1) for _ in range(n + 1)]
+    for i in range(n + 1):
+        dp[i][0] = True
+    
+    for i in range(1, n + 1):
+        for j in range(1, target_sum + 1):
+            if arr[i - 1] <= j:
+                dp[i][j] = dp[i - 1][j] or dp[i - 1][j - arr[i - 1]]
+            else:
+                dp[i][j] = dp[i - 1][j]
+    
+    return dp[n][target_sum]
+\end{lstlisting}
+
+\newpage

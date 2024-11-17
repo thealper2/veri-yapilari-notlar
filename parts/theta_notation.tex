@@ -1,0 +1,37 @@
+\section{Theta Notation}
+
+Bir algoritmanın çalışma süresinin veya bellek kullanımının en iyi ve en kötü durumlarını birleştirerek bir üst ve alt sınır sağlar. Theta notasyonu, bir algoritmanın belirli bir giriş boyutu için zaman veya alan karmaşıklığını kesin bir şekilde belirtir. Bir algoritmanın asimptotik davranışını daha iyi anlamak için, karmaşıklık analizi yaparken diğer notasyonlarla (Omage notasyonu, O notasyonu) birlikte kullanır.
+
+\[ c_1 \cdot f(n) \leq T(n) \leq c_2 \cdot f(n) \]
+
+Burada:
+
+\begin{itemize}
+    \item $c_1$ ve $c_2$: Pozitif sabitlerdir.
+    \item $n$: Giriş boyutunu temsil eder.
+    \item $T(n)$: Algoritmanın karmaşıklığıdır.
+    \item $f(n)$: Algoritmanın karmaşıklığını temsil eden fonksiyondur.
+\end{itemize}
+
+\begin{lstlisting}[language=Python]
+def bubble_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        for j in range(0, n - i  -1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+    return arr
+\end{lstlisting}
+
+Bu kod, Bubble Sort algoritmasını temsil eder. Algoritma, dzinin her elemanını karşılaştırarak sıralar. İçteki döngü, dıştaki döngü ile çarpılarak toplamda $\frac{n(n-1)}{2}$ karşılaştırma yapar. Bu, $\frac{n^2}{2} - \frac{n}{2}$ kadar karşılaştırma eder. İç içe iki for olduğu için Big-O notasyonu $O(n^2)$'dir. Dış döngü için toplam $n$ adet iterasyon yapılır. İç döngü içn toplam $\frac{n(n-1)}{2}$ adet iterasyon yapılır. Bu nedenle toplam karmaşıklık:
+
+\[ T(n) = O(n^2) \]
+
+Bubble algoritması hem en iyi durumda hem de en kötü durumda benzer bir performans sergiler;
+
+\begin{itemize}
+    \item \textbf{En İyi Durum}: Dizi zaten sıralıysa, yine tüm karşılaştırmalar yapılır, $\Theta(n^2)$.
+    \item \textbf{En Kötü Durum}: Dizi tamamen ters sıralıysa, yine tüm karşılaştırmalar yapılır, $\Theta(n^2)$.
+\end{itemize}
+
+\newpage

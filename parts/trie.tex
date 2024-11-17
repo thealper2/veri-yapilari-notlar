@@ -1,0 +1,51 @@
+\section{Trie (Prefix Tree)}
+
+Trie, sözlük (dictionary), dijital ağaç (digital tree) veya ön ek ağacı (prefix tree) olarak da bilinir. Kelimeler veya diziler gibi ardışık verilerin verimli bir şekilde saklanması ve aranması için kullanılır. Ön ekleri paylaşan dizileri organize etmek için kullanılır. Trie, karakter bazlı bir veri yapısı olup, her bir düğümü bir karakteri temsil eder. Bu yapı sayesinde verilerin eklenmesi, silinmesi ve aranması işlemleri oldukça hızlı ve etkili bir şekilde yapılabilir.
+
+Trie ağacının her düğümü, bir karakteri temsil eder. Kök düğüm boş bir karakterdir. Her düğüm, bir dizi çocuk düğüme (diğer karakterler) işaret edebilir. Kelimeler, karakter karakter Trie'ye eklenir. Her karakter bir düğümde saklanır ve sonraki karakter o düğümün alt düğümüne eklenir. Bir kelimenin sonunu belirlemek için özel bir işaretleyici kullanılır. Trie'nin en önemli avantajı, kelimeler arasındaki ortak ön eklerin tek bir yol boyunca saklanabilmesidir. Trie yapısında bir kelimeyi aramak, kelimenin uzunluğuna bağlıdır. Her karakter tek tek kontrol edilir, bu da özellikle ön ek aramaları için çok etkilidir.
+
+\subsection{Python Kodu - Trie}
+
+\begin{lstlisting}[language=Python]
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.end_of_string = False
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def insert(self, word):
+        node = self.root
+        for char in word:
+            if char not in node.children:
+                node.children[char] = TrieNode()
+
+            node = node.children[char]
+
+        node.end_of_string = True
+
+    def search(self, word):
+        node = self.root
+        for char in word:
+            if char not in node.children:
+                return False
+
+            node = node.children[char]
+
+        return node.end_of_string
+
+    def starts_with(self, prefix):
+        node = self.root
+        for char in prefix:
+            if char not in node.children:
+                return False
+
+            node = node.children[char]
+
+        return True
+\end{lstlisting}
+
+
+\newpage

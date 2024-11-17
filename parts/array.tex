@@ -1,0 +1,173 @@
+\section{Array (Dizi)}
+
+Array, belirli bir veri tipinde sabit boyutta, ardışık bellek konumlarında depolanan öğelerin koleksiyonudur. Array, aynı türden verileri saklamak için kullanılır. Array oluşturulurken boyutu belirlenir ve bu boyut programın çalışma süresi boyunca değişmez. Array, homojen veri tipine sahiptir yani array içerisindeki tüm elemanlar aynı veri tipine sahip olmalıdır. Array'in elemanlarına index numarası kullanılarak doğrudan erişilebilir. Bu $O(1)$ zaman karmaşıklığı ile gerçekleştirilir. Array elemanları bellekte ardışık olarak saklanır, bu da bellekteki bellek adresleri arasında kesintisiz bir yapı sağlar. Bu, bellek yönetimi açısından avantajlıdır.
+
+Array, bellekte ardışık bellek alanları üzerinde depolandığı için bellekte başlangıç adresi ve bu adres üzerinden yapılan indeksleme ile erişim sağlanır. Bellekte bir array oluşturulduğunda, belleğin bir kısmı ayrılır ve elemanlar bu alana yerleştirilir.
+
+Array'ler iki tiptedir:
+
+\begin{itemize}
+    \item \textbf{Tek Boyutlu Array (One-Dimensional Array)}: Elemanların tek bir sıra halinde sıralandığı array türüdür. Elemanlara yalnızca bir index ile erişilir. Bellekte ardışık olarak saklanır.
+    \item \textbf{Çok Boyutlu Array (Multi-Dimensional Array)}: Birden fazla boyutta elemanlar içeren array türüdür. Elemanlara birden fazla index kullanılarak erişilir. Bellekte ardışık olarak saklanır.
+\end{itemize}
+
+\subsection{Erişim (Access)}
+
+Array'deki bir elemana erişmek, elemanın index numarasını kullanarak doğrudan yapılır. Erişim süresi, dizi boyutuna bağlı değildir, çünkü dizi elemanları bellekte ardışık olarak depolanaır. Bu yüzden zaman karmaşıklığı $O(1)$'dir.
+
+\subsubsection{Python - Indexing}
+
+\begin{lstlisting}[language=Python]
+import array
+arr = array.array('i', [1, 2, 3])
+arr[2]
+\end{lstlisting}
+
+\subsection{Arama (Search)}
+
+Doğrusal arama, array'deki her elemanı sırayla kontrol eder. En kötü durumda, aranan eleman dizinin sonunda yer alır. Zaman karmaşıklığı $O(n)$'dir.
+
+\subsubsection{Python - Linear Search}
+
+\begin{lstlisting}[language=Python]
+def linear_search(arr, target):
+    for i in range(len(arr)):
+        if arr[i] == target:
+            return i
+    return -1
+\end{lstlisting}
+
+\subsection{Ekleme (Insertion)}
+
+Array'e yeni bir eleman eklemek, mevcut boyutunu aşmıyorsa array'ın sonuna eklenebilir. Ancak, belirli bir pozisyona eklemek isteniyorsa, o pozisyondan itibaren tüm elemanlar bir pozisyon kaydırılmalıdır. Sonuna ekleme işleminde; eğer dizinin boyutu yeterliyse, yeni eleman dizinin sonuna eklenir. Dizinin sonuna eleman eklemek hızlıdır. Zaman karmaşıklığı $O(1)$'dir. Belirli bir pozisyona ekleme işleminde; eleman eklemek istenilen pozisyondan itibaren tüm elemanların kaydırılması gerekir. En kötü durumda, elemanın eklenmesi gereken pozisyon dizinin başıysa tüm elemanlar kaydırılmak zorundadır. Zaman karmaşıklığı $O(n)$'dir.
+
+\subsubsection{Python - Append}
+
+\begin{lstlisting}[language=Python]
+import array
+arr = array.array('i', [1, 2, 3])
+arr.append(4)
+\end{lstlisting}
+
+\subsubsection{Python - Insert}
+
+\begin{lstlisting}[language=Python]
+import array
+arr = array.array('i', [1, 2, 3])
+new_element = 25
+position = 1
+arr = arr[:position] + [new_element] + arr[position:]
+\end{lstlisting}
+
+\subsection{Silme (Deletion)}
+
+Array'den bir elemanı silmek için silinecek elemanın yeri bilinmelidir. Silenen elemanın yerine null veya başka bir değer koyulur. Silme işleminden sonra, elemanın ardından gelen tüm elemanlar bir pozisyon kaydırılmalıdır. Eğer sondeki eleman silinecekse; sadece o eleman kaldırılmalıdır. Dizi sonundaki elemanı silmek hızlıdır. Zaman karmaşıklığı $O(1)$'dir. Eğer belirli bir eleman silinecekse; diğer elemanlar kaydırılmalıdır. En kötü durumda, silinmesi gereken eleman dizinin başındaysa tüm elemanlar kaydırılmak zorundadır. Zaman karmaşıklığı $O(n)$'dir.
+
+\subsubsection{Python - Pop}
+
+\begin{lstlisting}[language=Python]
+import array
+arr = array.array('i', [1, 2, 3])
+arr.pop()
+\end{lstlisting}
+
+\subsubsection{Python - Remove}
+
+\begin{lstlisting}[language=Python]
+import array
+arr = array.array('i', [1, 2, 3])
+arr.remove(0)
+\end{lstlisting}
+
+\subsection{Python "array" Kütüphanesi}
+
+\begin{itemize}
+    \item \textbf{append()}: Sonuna ekleme.
+    \item \textbf{insert()}: Belirtilen nesneyi belirtilen indekse ekleme.
+    \item \textbf{extend()}: Bir arrayi başka bir arrayin sonuna ekleyerek birleştirme.
+    \item \textbf{fromlist()}: List tipindeki bir nesneyi array nesnesinin sonuna ekler.
+    \item \textbf{pop()}: Sondan eleman silme.
+    \item \textbf{index()}: Belirtilen indeksteki elemanı döndürür.
+    \item \textbf{reverse()}: Array'i ters çevirme.
+    \item \textbf{buffer\_info()}: Bellekteki alanı ve array'in uzunluğu.
+    \item \textbf{count()}: Belirtilen elemanın array içindeki kaç kere geçtiği.
+    \item \textbf{tolist()}: Array tipindeki bir nesneden List nesnesi türetme.
+\end{itemize}
+
+\begin{lstlisting}[language=Python]
+import array
+
+### create an array
+arr = array.array('i', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+arr
+# array('i', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+
+### indexing
+arr[1]
+# 2
+arr[1:5]
+# array('i', [2, 3, 4, 5])
+arr[::-1]
+# array('i', [10, 9, 8, 7, 6, 5, 4, 3, 2, 1])
+arr[:-1]
+# array('i', [1, 2, 3, 4, 5, 6, 7, 8, 9])
+arr[-1]
+# 10
+
+### append() method
+arr.append(11)
+arr
+# array('i', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+
+### insert() method
+arr.insert(0, 0)
+arr
+# array('i', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+
+### extend() method
+arr.extend(
+    array.array('i', [12, 13, 14, 15])
+)
+arr
+# array('i', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
+
+### fromlist() method
+temp = [16, 17]
+arr.fromlist(temp)
+arr
+# array('i', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17])
+
+### remove() method
+arr.remove(0)
+arr
+# array('i', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17])
+
+### pop() method
+arr.pop()
+arr
+# array('i', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
+
+### index() method
+arr.index(4)
+# 3
+
+### reverse() method
+arr.reverse()
+arr
+# array('i', [16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1])
+
+### buffer_info() method
+arr.buffer_info()
+# (140445740545920, 16)
+
+### count() method
+arr.count(10)
+# 1
+
+### tolist() method
+temp = arr.tolist()
+temp
+# [16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+\end{lstlisting}
+
+\newpage

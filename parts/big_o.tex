@@ -1,0 +1,124 @@
+\section{Big-O Notation}
+
+Big-O Notation, algoritmaların verimliliğini ve performansını değerlendirmek için kullanılan matematiksel bir gösterimdir. Bir algoritmanın giriş boyutu (b) büyüdükçe nasıl davrandığını gösterir. Bu gösterim, algoritmanın en kötü senaryoda nasıl bir performans sergileyeceğini anlatır. Asıl odak, algoritmanın performansının giriş boyutu büyüdükçe ne kadar arttığıdır. Big-O değeri, algoritmanın giirş boyutuna göre ne kadar hızlı arttığını belirler. Hesaplama yapılırken şu faktörler dikkate alınır:
+
+\begin{itemize}
+    \item \textbf{Döngüler (Loops)}: Her döngü, giriş boyutuna bağımlı olarak çalışır.
+    \item \textbf{Yinelemeli (Recursive) Fonksiyonlar}: Fonksiyonlar kendilerini çağırdıklarında, üstel veya logaritmik bir büyüme sergilerler.
+    \item \textbf{Operasyonlar (Operations)}: Veri yapılarında yapılan listeleme, ekleme, silme gibi işlemler, yapının tipine göre farklı Big-O değerine sahiptir.
+\end{itemize}
+
+\subsection{Space Complexity (Bellek Karmaşıklığı)}
+
+Space Complexity, algoritma çalışırken kullandığı ekstra bellek miktarını temsil eder. Bir algoritmanın çalışırken ihtiyaç duyduğu toplam bellek miktarını ifade eder. Space Complexity, sadece programın çalışması için gereken ekstra bellek miktarını ölçer. Girdinin zaten kendisinin kapladığı bellek dikkate alınmaz. Amacı, bir algoritmanın ne kadar verimli bir şekilde bellek kullandığını belirlemektir.
+
+\subsection{Time Complexity (Zaman Karmaşıklığı)}
+
+Time Complexity, bir algoritmanın çalışması için gereken süreyi, girdi boyutu (n) büyüdükçe ifade eder. Algoritmanın gerçekleştirdiği işlem sayısını ve bu işlemlerin zaman maliyetlerini analiz eder. Girdi boyutu büyüdükçe, algoritmanın ne kadar hızlı çalışacağını tahmin eder. Amacı, bir algoritmanın zaman verimliliğini ölçmek ve büyük veri setleriyle nasıl ölçeklendiğini anlamaktır.
+
+\subsection{Big-O Notation Türleri}
+
+\begin{enumerate}
+    \item \textbf{O(1) - Sabit Zaman}:
+    \begin{itemize}
+        \item Algoritma, giriş boyutundan bağımsız olarak her zamana aynı sürede çalışır.
+        \item Örneğin; dizideki bir elemana doğrudan erişim (indexleme).
+    \end{itemize}
+    \item \textbf{O(logn) - Logaritmik Zaman}:
+    \begin{itemize}
+        \item Giriş boyutu arttıkça çalışma zamanı logaritmik olarak artar.
+        \item Örneğin; ikili arama algoritması.
+    \end{itemize}
+    \item \textbf{O(n) - Doğrusal Zaman}:
+    \begin{itemize}
+        \item Giriş boyutuyla doğrusal olarak artar. Girdi ne kadar büyükse, algoritma o kadar uzun sürede çalışır.
+        \item Örneğin; bir listeyi döngüyle baştan sona taramak.
+    \end{itemize}
+    \item \textbf{O(nlogn) - Doğrusal Logaritmik Zaman}:
+    \begin{itemize}
+        \item Verimli sıralama algoritmalarında görülür.
+        \item Örneğin; hızlı sıralama (quick sort), birleştirme sıralaması (merge sort).
+    \end{itemize}
+    \item \textbf{O($n^2$) - Karesel Zaman}:
+    \begin{itemize}
+        \item Giriş boyutu büyüdükçe çalışma zamanı karesel olarak artar.
+        \item Örneğin; çift döngüyle çalışan sıralama algoritmaları (bubble sort).
+    \end{itemize}
+    \item \textbf{O($2^n$) - Üstel Zaman}:
+    \begin{itemize}
+        \item Giriş boyutu arttıkça çalışma süresi üstel olarak artar.
+        \item Örneğin; bazı yinelemeli çözümler (fibonacci serisi).
+    \end{itemize}
+    \item \textbf{O(n!) - Faktöriyel Zaman}:
+    \begin{itemize}
+        \item Çok büyük veri kümeleri için inanılmaz derecede yavaş çalışan algoritmalar.
+        \item Örneğin; tüm olası permütasyonları hesaplamak.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Sadeleştirme - Drop Constants (Sabitleri Atma)}
+
+Sabitleri atma yöntemi, Big-O notasyonunda yer alan sabit katsayıların büyümeyi etkilemediğini varsayarak, bunları Big-O ifadesinden çıkarma işlemidir. Sabit bir katsayı, büyüme oranını etkilemediği için sadeleştirilir. Giriş boyutu (n) büyüdükçe sabit faktörlerin etkisi giderek küçülür ve böylece ihmal edilebilir hale gelir. Örneğin;
+
+\begin{lstlisting}[language=Python]
+def print_elements_twice(arr):
+    for i in arr:
+        print(i)
+
+    for i in arr:
+        print(i)
+\end{lstlisting}
+
+Bu fonksiyon, girdi içerisindeki her bir elemanı iki kere yazdırır. İki ayrı döngü ile elemanları iki kez dolaştığı için çalışma süresi;
+
+\begin{itemize}
+    \item \textbf{Birinci döngü}: $O(n)$
+    \item \textbf{İkinci döngü}: $O(n)$
+    \item \textbf{Toplam}: $O(n) + O(n) = O(2n)$
+\end{itemize}
+
+Çalışma süresi $O(2n)$'dir fakat Big-O sadeleştirilerek $O(n)$ olarak yazılır çünkü "2" ihmal edilir.
+
+Bir başka örnekte ise;
+
+\begin{lstlisting}[language=Python]
+def example_func(arr):
+    for i in arr:
+        for j in arr:
+            print(i, j)
+
+    print("Done")
+\end{lstlisting}
+
+Bu fonksiyon iki döngü çalıştırır ve her bir elemanı diğeriyle birlikte yazdırır:
+
+\begin{itemize}
+    \item İç içe iki döngü: $O(n^2)$
+    \item Sabit bir çıktı: $O(1)$
+\end{itemize}
+
+Toplamda bu algoritmanın karmaşıklığı $O(n^2 + 1)$ olur. Ancak sabit terim $O(1)$, giriş boyutu büyüdükçe önemini kaybedeceği için ihmal edilir. Böylece sonuç $O(n^2)$ olur.
+
+\subsection{Sadeleştirme - Drop Non-Dominant Terms (Baskın Olmayan Terimleri Atma)}
+
+Büyük giriş boyutlarında baskın olmayan, daha küçük büyüme hızına sahip terimler ihmal edilir. En büyük büyüme hızına sahip olan terim, giriş boyutu arttıkça algoritmanın performansını en çok etkileyen terimdir. Bu yüzden baskın olmayan terimleri atarak sadeleştirme yapılır.
+
+\begin{lstlisting}[language=Python]
+def example_func(arr):
+    for i in arr:
+        for j in arr:
+            print(i, j)
+    for i in arr:
+        print(i)
+\end{lstlisting}
+
+Bu fonksiyon iki bölümden oluşur:
+
+\begin{itemize}
+    \item İç içe iki döngü: $O(n^2)$
+    \item Tek bir döngü: $O(n)$
+\end{itemize}
+
+Toplamda algoritmanın karmaşıklığı $O(n^2 + n)$ olur. Ancak giriş boyutu büyüdükçe $O(n^2)$ terimi baskın hale gelir, çünkü $n^2$, $n$'den daha hızlı büyür. Bu yüzden $O(n^2 + n)$ ifadesinden baskın olmayan $O(n)$ terimi atılır ve sonuç $O(n^2)$ olur.
+
+\newpage

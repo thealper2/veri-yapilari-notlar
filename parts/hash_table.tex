@@ -1,0 +1,32 @@
+\section{Hash Tables (Karma Tablolar)}
+
+Hash Table, verileri hızlı bir şekilde depolamak ve erişmek için kullanılır. Anahtar (key) ve değer (value) çiftlerinden oluşur. Veri öğelerine anahtar üzerinden hızlıca erişim sağlamak için hash fonksiyonları kullanılır. Hash Table, anahtarları sayısal bir değere dönüştürmek için hash fonksiyonu kullanır. Bu fonksiyon, anahtarlı belirli bir boyutla sınırlandırır ve bu sayede anahtar için bir indeks belirler. Hash Table, aynı hash değerine sahip iki farklı anahtarın çakışmasını engellemek için çeşitli yöntemlere başvurur.
+
+\begin{itemize}
+    \item \textbf{Chaining (Zincirleme)}: Çakışan anahtarlar için her bir hash değeri altında bir liste oluşturulur. Aynı hash değerine sahip öğeler bu listede yer alır.
+    \item \textbf{Open Addressing (Açık Adresleme)}: Çakışan anahtarlar için belirli bir stratejiyle boş bir yer arayarak yeni bir pozisyon bulunur. Bu stratejiler arasında linear probing, quadratic probing ve double hashing yer alır.
+\end{itemize}
+
+Hash Tables, $O(1)$ zaman karmaşıklığına sahip erişim sürelerine sahiptir. Yani, bir anahtar ile veriye erişmek çok hızlıdır. Hash Tables, veri seti büyüdükçe boyutunu artırabilir. Eğer tabloya eklenen öğe sayısı belli bir eşik değerini aşarsa, hash tablosu yeniden boyutlandırılabilir. Hash Tables, öğelerin sırasını garanti etmez. Yani, öğelere eklenme sırasına göre erişmek mümkün olmayabilir.
+
+\subsection{Python Kodu - Hash Table}
+
+\begin{lstlisting}[language=Python]
+class HashTable:
+    def __init__(self, size=10):
+        self.size = size
+        self.table = [None] * size
+
+    def hash_function(self, key):
+        return hash(key) % self.size
+
+    def insert(self, key, value):
+        index = self.hash_function(key)
+        self.table[index] = value
+
+    def get(self, key):
+        index = self.hash_function(key)
+        return self.table[index]
+\end{lstlisting}
+
+\newpage
